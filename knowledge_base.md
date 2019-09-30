@@ -14,3 +14,6 @@ SCSI, local disks:
 * `ls -ld /sys/block/sd*`
 * `udevadm info -n /dev/sda -a`
 * `hdparm -i /dev/sda`
+
+Kubernetes:
+* Unschedule node: `kubectl cordon NODENAME`
