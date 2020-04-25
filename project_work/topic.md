@@ -26,5 +26,5 @@ VoIP communication is sensitive to latency and its variation (jitter), so the mo
 | ChaCha20-Poly1305 | [wolfCrypt](https://www.wolfssl.com/products/wolfcrypt-2/) | | | | GPLv2 | Commercial license |
 | AES-256-GCM | [libsodium](https://doc.libsodium.org/) | | | | ISC | [Requires SSSE3, AES-NI and CLMUL](https://doc.libsodium.org/secret-key_cryptography/aead/aes-256-gcm#limitations) |
 | ChaCha20-Poly1305 | [libsodium](https://doc.libsodium.org/) | | | | ISC |  |
-| AEGIS-128L | ? | | | | ISC | Patent-free |
+| AEGIS-128L | ? | | | | ISC |  |
 | AEGIS-256 | [libsodium](https://doc.libsodium.org/) | | | | ISC |  |
