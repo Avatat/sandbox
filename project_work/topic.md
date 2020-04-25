@@ -4,15 +4,15 @@ Comparison, choice and implementation of a modern encryption algorithm for VoIP 
 # Purpose
 A purpose is to compare, choose the best one, and implement a modern encryption algorithm for an open source VoIP communicator - [Mumble](https://github.com/mumble-voip/mumble).
 It's required, because Mumble uses old and slow algorithm - AES-OCB. The second reason is that OCB mode is patented and can't be used for free in commercial solutions (like games, in Mumble case).
-It's an answer for the issue: https://github.com/mumble-voip/mumble/issues/3918
+It's an answer to [this issue](https://github.com/mumble-voip/mumble/issues/3918).
 
 I would like to benchmark below algorithms:
-* AES-256-GCM
-* [ChaCha20-Poly1305](https://tools.ietf.org/html/rfc7539)
+* [AES-256-GCM](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38d.pdf)
+* [ChaCha20-Poly1305](https://tools.ietf.org/html/rfc8439)
 * [AEGIS](http://competitions.cr.yp.to/round3/aegisv11.pdf)
 
 Compare and rate their suitability for VoIP communication.
-VoIP communication is sensitive to latency and it's variation (jitter), so the most suitable solution should have the lowest latency. We will use encryption on the server side, so CPU usage and throughput are also important metrics.
+VoIP communication is sensitive to latency and its variation (jitter), so the most suitable solution should have the lowest latency. We will use encryption on the server side, so CPU usage and throughput are also important metrics.
 
 ### Comparison table:
 | Algorithm | Library | Latency | CPU usage | Throughput | License | Patents |
