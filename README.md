@@ -8,3 +8,5 @@ Welcome to my Git (GitHub?) Sandbox. I use this place as my playground for progr
 	* Introduction to OpenMP (Intel)
 * Tests
 	* [NVENC benchmarks](tests/nvenc.md)
+	* [**A**uthenticated **E**ncryption with **A**ssociated **D**ata algorithms and libraries benchmark](https://github.com/mumble-voip/crypto-benchmark)
+* My B.Eng. project work: [Comparison, choice and implementation of a modern encryption algorithm for VoIP communication](project_work/topic.md)
