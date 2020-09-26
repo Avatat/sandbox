@@ -182,7 +182,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 </details>
 
 <details>
-<summary>Speed: 2.75x (time 3m51s) , preset: veryfast</summary>
+<summary>Speed: 2.75x (time 3m51s), preset: veryfast</summary>
 
 ```
 $ time ffmpeg -y -c:v h264 -i bbb_sunflower_1080p_30fps_normal.mp4 \
@@ -348,7 +348,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 ### Intel Quick Sync Video decoding/encoding on Intel i5-8250U (UHD 620)
 <details>
-<summary>Speed: 5.91x (time 1m47s) , preset: medium</summary>
+<summary>Speed: 5.91x (time 1m47s), preset: medium</summary>
 
 ```
 $ time ffmpeg -y -hwaccel qsv -c:v h264_qsv -i bbb_sunflower_1080p_30fps_normal.mp4 \
@@ -499,7 +499,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 </details>
 
 <details>
-<summary>Speed: 7.65x (time 1m23s) , preset: veryfast</summary>
+<summary>Speed: 7.65x (time 1m23s), preset: veryfast</summary>
 
 ```
 $ time ffmpeg -y -hwaccel qsv -c:v h264_qsv -i bbb_sunflower_1080p_30fps_normal.mp4 \
@@ -652,7 +652,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 ### NVIDIA NVDEC/NVENC decoding/encoding on Quadro K2200
 The results comes from [here](nvenc.md).
 <details>
-<summary>Speed: 11.3x (time 56s) , preset: medium</summary>
+<summary>Speed: 11.3x (time 56s), preset: medium</summary>
 
 ```
 $ time ffmpeg -y -vsync 0 -hwaccel_device 1 -hwaccel cuvid -c:v h264_cuvid -i bbb_sunflower_1080p_30fps_normal.mp4 -c:a copy -vf scale_npp=-1:720 -c:v h264_nvenc -b:v 2000k -f mp4 /dev/null -c:a copy -vf scale_npp=-1:540 -c:v h264_nvenc -b:v 1500k -f mp4 /dev/null -c:a copy -vf scale_npp=-1:480 -c:v h264_nvenc -b:v 1000k -f mp4 /dev/null
@@ -772,7 +772,7 @@ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
 </details>
 
 <details>
-<summary>Speed: 12.5x (time 51s) , preset: fast</summary>
+<summary>Speed: 12.5x (time 51s), preset: fast</summary>
 
 ```
 $ time ffmpeg -y -vsync 0 -hwaccel_device 1 -hwaccel cuvid -c:v h264_cuvid -i bbb_sunflower_1080p_30fps_normal.mp4 -c:a copy -vf scale_npp=-1:720 -c:v h264_nvenc -b:v 2000k -preset fast -f mp4 720p -c:a copy -vf scale_npp=-1:540 -c:v h264_nvenc -b:v 1500k -preset fast -f mp4 /dev/null -c:a copy -vf scale_npp=-1:480 -c:v h264_nvenc -b:v 1000k -preset fast -f mp4 /dev/null
@@ -1260,7 +1260,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 
 ### Intel Quick Sync Video decoding/encoding on Intel i5-8250U (UHD 620)
 <details>
-<summary>Speed: 3.79x (time 2m47s) , preset: medium</summary>
+<summary>Speed: 3.79x (time 2m47s), preset: medium</summary>
 
 ```
 $ time ffmpeg -y -hwaccel qsv -c:v h264_qsv -i bbb_sunflower_2160p_30fps_normal.mp4 \
@@ -1413,7 +1413,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 </details>
 
 <details>
-<summary>Speed: 4.09x (time 2m35s) , preset: veryfast</summary>
+<summary>Speed: 4.09x (time 2m35s), preset: veryfast</summary>
 
 ```
 $ time ffmpeg -y -hwaccel qsv -c:v h264_qsv -i bbb_sunflower_2160p_30fps_normal.mp4 \
@@ -1568,7 +1568,7 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 ### NVIDIA NVDEC/NVENC decoding/encoding on Quadro K2200
 The result comes from [here](nvenc.md).
 <details>
-<summary>Speed: 3.6x (time 2m56s) , preset: medium</summary>
+<summary>Speed: 3.6x (time 2m56s), preset: medium</summary>
 
 ```
 $ time ffmpeg -y -vsync 0 -hwaccel_device 1 -hwaccel cuvid -c:v h264_cuvid -i bbb_sunflower_2160p_30fps_normal.mp4 -c:a copy -vf scale_npp=-1:1080 -c:v h264_nvenc -b:v 4000k -f mp4 /dev/null -c:a copy -vf scale_npp=-1:720 -c:v h264_nvenc -b:v 2000k -f mp4 /dev/null -c:a copy -vf scale_npp=-1:480 -c:v h264_nvenc -b:v 1000k -f mp4 /dev/null
