@@ -1,3 +1,5 @@
+# This page is deprecated
+Please go to [FFmpeg transcoding benchmarks](ffmpeg_transcoding.md) to see newer benchmarks.
 # NVENC benchmarks
 ## Quadro K2200 H.264 encoding tests
 ```
