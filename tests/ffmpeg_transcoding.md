@@ -987,6 +987,502 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
 ```
 </details>
 
+### VAAPI decoding/encoding on AMD Ryzen 5600G
+
+<details>
+<summary>Speed: 4.04x (time 2m37s), preset: medium</summary>
+
+```
+$ sar -u -q 30 & time \
+ffmpeg -y -hwaccel vaapi -hwaccel_output_format vaapi -hwaccel_device /dev/dri/renderD128 -i bbb_sunflower_1080p_30fps_normal.mp4 \
+-c:a copy -vf scale_vaapi=w=-1:h=720 -c:v h264_vaapi -b:v 2000k -preset medium -f mp4 /dev/null \
+-c:a copy -vf scale_vaapi=w=-1:h=540 -c:v h264_vaapi -b:v 1500k -preset medium -f mp4 /dev/null \
+-c:a copy -vf scale_vaapi=w=-1:h=478 -c:v h264_vaapi -b:v 1000k -preset medium -f mp4 /dev/null \
+; pkill -SIGINT sar
+[1] 30405
+Linux 5.15.0-41-generic (bzieba-desktop) 	12.07.2022 	_x86_64_	(12 CPU)
+ffmpeg version 4.4.2-0ubuntu0.22.04.1 Copyright (c) 2000-2021 the FFmpeg developers
+  built with gcc 11 (Ubuntu 11.2.0-19ubuntu1)
+  configuration: --prefix=/usr --extra-version=0ubuntu0.22.04.1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --arch=amd64 --enable-gpl --disable-stripping --enable-gnutls --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libjack --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librabbitmq --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-libzmq --enable-libzvbi --enable-lv2 --enable-omx --enable-openal --enable-opencl --enable-opengl --enable-sdl2 --enable-pocketsphinx --enable-librsvg --enable-libmfx --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libx264 --enable-shared
+  libavutil      56. 70.100 / 56. 70.100
+  libavcodec     58.134.100 / 58.134.100
+  libavformat    58. 76.100 / 58. 76.100
+  libavdevice    58. 13.100 / 58. 13.100
+  libavfilter     7.110.100 /  7.110.100
+  libswscale      5.  9.100 /  5.  9.100
+  libswresample   3.  9.100 /  3.  9.100
+  libpostproc    55.  9.100 / 55.  9.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'bbb_sunflower_1080p_30fps_normal.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    creation_time   : 2013-12-16T17:44:39.000000Z
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    composer        : Sacha Goedegebure
+  Duration: 00:10:34.53, start: 0.000000, bitrate: 3481 kb/s
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p, 1920x1080 [SAR 1:1 DAR 16:9], 2998 kb/s, 30 fps, 30 tbr, 30k tbn, 60 tbc (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:39.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+  Stream #0:1(und): Audio: mp3 (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 160 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+  Stream #0:2(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (h264_vaapi))
+  Stream #0:2 -> #0:1 (copy)
+  Stream #0:0 -> #1:0 (h264 (native) -> h264 (h264_vaapi))
+  Stream #0:2 -> #1:1 (copy)
+  Stream #0:0 -> #2:0 (h264 (native) -> h264 (h264_vaapi))
+  Stream #0:2 -> #2:1 (copy)
+Press [q] to stop, [?] for help
+[h264_vaapi @ 0x5595995a4500] Driver does not support some wanted packed headers (wanted 0xd, found 0).
+[h264_vaapi @ 0x5595995a4500] Driver does not support packed sequence headers, but a global header is requested.
+[h264_vaapi @ 0x5595995a4500] No global header will be written: this may result in a stream which is not usable for some purposes (e.g. not muxable to some containers).
+[mp4 @ 0x5595995b9c00] track 1: codec frame size is not set
+Output #0, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), vaapi_vld(progressive), 1280x720 [SAR 1:1 DAR 16:9], q=2-31, 2000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:39.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 h264_vaapi
+  Stream #0:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+[h264_vaapi @ 0x5595995bb780] Driver does not support some wanted packed headers (wanted 0xd, found 0).
+[h264_vaapi @ 0x5595995bb780] Driver does not support packed sequence headers, but a global header is requested.
+[h264_vaapi @ 0x5595995bb780] No global header will be written: this may result in a stream which is not usable for some purposes (e.g. not muxable to some containers).
+[mp4 @ 0x5595995a3500] track 1: codec frame size is not set
+Output #1, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #1:0(und): Video: h264 (High) (avc1 / 0x31637661), vaapi_vld(progressive), 960x540 [SAR 1:1 DAR 16:9], q=2-31, 1500 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:39.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 h264_vaapi
+  Stream #1:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+[h264_vaapi @ 0x5595995a78c0] Driver does not support some wanted packed headers (wanted 0xd, found 0).
+[h264_vaapi @ 0x5595995a78c0] Driver does not support packed sequence headers, but a global header is requested.
+[h264_vaapi @ 0x5595995a78c0] No global header will be written: this may result in a stream which is not usable for some purposes (e.g. not muxable to some containers).
+[mp4 @ 0x5595995a63c0] track 1: codec frame size is not set
+Output #2, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #2:0(und): Video: h264 (High) (avc1 / 0x31637661), vaapi_vld(progressive), 850x478 [SAR 3824:3825 DAR 16:9], q=2-31, 1000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:39.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 h264_vaapi
+  Stream #2:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+frame= 3932 fps=132 q=-0.0 q=-0.0 q=-0.0 size=   36864kB time=00:02:11.03 bitrate=2304.7kbits/s dup=6 drop=0 speed= 4.4x    
+16:48:11        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:48:41        all      0,53      0,00      3,48      0,13      0,00     95,86
+
+16:48:11      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:48:41            0      1243      1,17      4,65      5,88         0
+frame= 7851 fps=132 q=-0.0 q=-0.0 q=-0.0 size=   73984kB time=00:04:21.66 bitrate=2316.2kbits/s dup=6 drop=0 speed= 4.4x    
+16:48:41        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:49:11        all      0,41      0,00      3,55      0,04      0,00     96,00
+
+16:48:41      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:49:11            0      1240      0,91      4,25      5,70         0
+frame=11896 fps=133 q=-0.0 q=-0.0 q=-0.0 size=  112128kB time=00:06:36.50 bitrate=2316.7kbits/s dup=6 drop=0 speed=4.42x    
+16:49:11        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:49:41        all      0,43      0,00      3,52      0,06      0,00     96,00
+
+16:49:11      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:49:41            0      1243      0,55      3,85      5,52         0
+frame=15917 fps=133 q=-0.0 q=-0.0 q=-0.0 size=  150528kB time=00:08:50.53 bitrate=2324.3kbits/s dup=6 drop=0 speed=4.42x    
+16:49:41        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:50:11        all      0,43      0,00      3,60      0,07      0,00     95,91
+
+16:49:41      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:50:11            1      1243      0,60      3,54      5,37         0
+frame=18224 fps=122 q=-0.0 q=-0.0 q=-0.0 size=  187648kB time=00:10:07.64 bitrate=2529.8kbits/s dup=6 drop=0 speed=4.06x    
+16:50:11        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:50:41        all      0,41      0,00      2,59      0,03      0,00     96,96
+
+16:50:11      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:50:41            0      1242      0,50      3,23      5,20         0
+[h264 @ 0x559599865740] Invalid NAL unit size (1048643 > 67).=00:10:12.92 bitrate=2525.1kbits/s dup=6 drop=0 speed=4.04x    
+[h264 @ 0x559599865740] Error splitting the input into NAL units.
+[h264 @ 0x559599830280] Invalid NAL unit size (8392789 > 85).
+[h264 @ 0x559599830280] Error splitting the input into NAL units.
+[h264 @ 0x55959984d180] Invalid NAL unit size (166 > 132).
+[h264 @ 0x55959984d180] Error splitting the input into NAL units.
+[h264 @ 0x5595998c4d80] Invalid NAL unit size (268501071 > 103).
+[h264 @ 0x5595998c4d80] Error splitting the input into NAL units.
+[h264 @ 0x5595998e1b40] reference overflow 0 > 15 or 35 > 15
+[h264 @ 0x5595998e1b40] decode_slice_header error
+[h264 @ 0x5595998e1b40] no frame!
+[h264 @ 0x5595998fe900] Invalid NAL unit size (-2109734821 > 83).
+[h264 @ 0x5595998fe900] Error splitting the input into NAL units.
+[h264 @ 0x55959991b800] Invalid NAL unit size (671088719 > 79).
+[h264 @ 0x55959991b800] Error splitting the input into NAL units.
+[h264 @ 0x559599938700] Invalid NAL unit size (1179712 > 64).
+[h264 @ 0x559599938700] Error splitting the input into NAL units.
+[h264 @ 0x559599955600] Invalid NAL unit size (16456 > 64).
+[h264 @ 0x559599955600] Error splitting the input into NAL units.
+[h264 @ 0x559599972500] Invalid NAL unit size (2097493 > 85).
+[h264 @ 0x559599972500] Error splitting the input into NAL units.
+[h264 @ 0x55959998f3c0] Invalid NAL unit size (1048661 > 87).
+[h264 @ 0x55959998f3c0] Error splitting the input into NAL units.
+[h264 @ 0x5595999ac2c0] Invalid NAL unit size (1048671 > 95).
+[h264 @ 0x5595999ac2c0] Error splitting the input into NAL units.
+Error while decoding stream #0:0: Invalid data found when processing input
+    Last message repeated 3 times
+[h264 @ 0x55959984d180] reference picture missing during reorder
+[h264 @ 0x55959984d180] Missing reference picture, default is 65686
+Error while decoding stream #0:0: Invalid data found when processing input
+    Last message repeated 7 times
+[h264 @ 0x559599972500] Invalid NAL unit size (3244 > 3212).e=00:10:19.80 bitrate=2520.8kbits/s dup=42 drop=0 speed=4.03x    
+[h264 @ 0x559599972500] Error splitting the input into NAL units.
+Error while decoding stream #0:0: Invalid data found when processing inputbitrate=2518.4kbits/s dup=42 drop=0 speed=4.03x    
+[h264 @ 0x559599972500] non-existing PPS 5 referenced4kB time=00:10:24.44 bitrate=2515.4kbits/s dup=45 drop=0 speed=4.03x    
+[h264 @ 0x559599972500] decode_slice_header error
+[h264 @ 0x559599972500] no frame!
+[h264 @ 0x55959998f3c0] Invalid NAL unit size (16778990 > 750).
+[h264 @ 0x55959998f3c0] Error splitting the input into NAL units.
+[h264 @ 0x5595999ac2c0] Invalid NAL unit size (134283534 > 782).
+[h264 @ 0x5595999ac2c0] Error splitting the input into NAL units.
+[h264 @ 0x5595999c91c0] Invalid NAL unit size (1098908655 > 871).
+[h264 @ 0x5595999c91c0] Error splitting the input into NAL units.
+[h264 @ 0x559599865740] Invalid NAL unit size (49737 > 589).
+[h264 @ 0x559599865740] Error splitting the input into NAL units.
+[h264 @ 0x559599830280] Invalid NAL unit size (1224744219 > 5435).
+[h264 @ 0x559599830280] Error splitting the input into NAL units.
+[h264 @ 0x55959984d180] Invalid NAL unit size (100861015 > 1111).
+[h264 @ 0x55959984d180] Error splitting the input into NAL units.
+[h264 @ 0x5595998c4d80] Invalid NAL unit size (1073742484 > 661).
+[h264 @ 0x5595998c4d80] Error splitting the input into NAL units.
+[h264 @ 0x5595998e1b40] Invalid NAL unit size (-2145385656 > 841).
+[h264 @ 0x5595998e1b40] Error splitting the input into NAL units.
+[h264 @ 0x5595998fe900] co located POCs unavailable
+[h264 @ 0x559599955600] mmco: unref short failure
+Error while decoding stream #0:0: Invalid data found when processing input
+    Last message repeated 8 times
+frame=19038 fps=121 q=-0.0 Lq=-0.0 q=-0.0 size=  194994kB time=00:10:34.56 bitrate=2517.3kbits/s dup=72 drop=0 speed=4.04x    
+video:374987kB audio:74314kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+
+real	2m37,330s
+user	0m6,630s
+sys	0m5,108s
+
+
+Average:        CPU     %user     %nice   %system   %iowait    %steal     %idle
+Average:        all      0,44      0,00      3,35      0,07      0,00     96,15
+
+Average:      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+Average:            0      1242      0,75      3,90      5,53         0
+```
+</details>
+
+<details>
+<summary>Speed: 3.97x (time 2m40s), preset: veryfast</summary>
+
+```
+$ sar -u -q 30 & time \
+ffmpeg -y -hwaccel vaapi -hwaccel_output_format vaapi -hwaccel_device /dev/dri/renderD128 -i bbb_sunflower_1080p_30fps_normal.mp4 \
+-c:a copy -vf scale_vaapi=w=-1:h=720 -c:v h264_vaapi -b:v 2000k -preset veryfast -f mp4 /dev/null \
+-c:a copy -vf scale_vaapi=w=-1:h=540 -c:v h264_vaapi -b:v 1500k -preset veryfast -f mp4 /dev/null \
+-c:a copy -vf scale_vaapi=w=-1:h=478 -c:v h264_vaapi -b:v 1000k -preset veryfast -f mp4 /dev/null \
+; pkill -SIGINT sar
+[1] 32346
+Linux 5.15.0-41-generic (bzieba-desktop) 	12.07.2022 	_x86_64_	(12 CPU)
+ffmpeg version 4.4.2-0ubuntu0.22.04.1 Copyright (c) 2000-2021 the FFmpeg developers
+  built with gcc 11 (Ubuntu 11.2.0-19ubuntu1)
+  configuration: --prefix=/usr --extra-version=0ubuntu0.22.04.1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --arch=amd64 --enable-gpl --disable-stripping --enable-gnutls --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libjack --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librabbitmq --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-libzmq --enable-libzvbi --enable-lv2 --enable-omx --enable-openal --enable-opencl --enable-opengl --enable-sdl2 --enable-pocketsphinx --enable-librsvg --enable-libmfx --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libx264 --enable-shared
+  libavutil      56. 70.100 / 56. 70.100
+  libavcodec     58.134.100 / 58.134.100
+  libavformat    58. 76.100 / 58. 76.100
+  libavdevice    58. 13.100 / 58. 13.100
+  libavfilter     7.110.100 /  7.110.100
+  libswscale      5.  9.100 /  5.  9.100
+  libswresample   3.  9.100 /  3.  9.100
+  libpostproc    55.  9.100 / 55.  9.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'bbb_sunflower_1080p_30fps_normal.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    creation_time   : 2013-12-16T17:44:39.000000Z
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    composer        : Sacha Goedegebure
+  Duration: 00:10:34.53, start: 0.000000, bitrate: 3481 kb/s
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p, 1920x1080 [SAR 1:1 DAR 16:9], 2998 kb/s, 30 fps, 30 tbr, 30k tbn, 60 tbc (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:39.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+  Stream #0:1(und): Audio: mp3 (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 160 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+  Stream #0:2(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (h264_vaapi))
+  Stream #0:2 -> #0:1 (copy)
+  Stream #0:0 -> #1:0 (h264 (native) -> h264 (h264_vaapi))
+  Stream #0:2 -> #1:1 (copy)
+  Stream #0:0 -> #2:0 (h264 (native) -> h264 (h264_vaapi))
+  Stream #0:2 -> #2:1 (copy)
+Press [q] to stop, [?] for help
+[h264_vaapi @ 0x5616c1b29500] Driver does not support some wanted packed headers (wanted 0xd, found 0).
+[h264_vaapi @ 0x5616c1b29500] Driver does not support packed sequence headers, but a global header is requested.
+[h264_vaapi @ 0x5616c1b29500] No global header will be written: this may result in a stream which is not usable for some purposes (e.g. not muxable to some containers).
+[mp4 @ 0x5616c1b3ec00] track 1: codec frame size is not set
+Output #0, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), vaapi_vld(progressive), 1280x720 [SAR 1:1 DAR 16:9], q=2-31, 2000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:39.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 h264_vaapi
+  Stream #0:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+[h264_vaapi @ 0x5616c1b40780] Driver does not support some wanted packed headers (wanted 0xd, found 0).
+[h264_vaapi @ 0x5616c1b40780] Driver does not support packed sequence headers, but a global header is requested.
+[h264_vaapi @ 0x5616c1b40780] No global header will be written: this may result in a stream which is not usable for some purposes (e.g. not muxable to some containers).
+[mp4 @ 0x5616c1b28500] track 1: codec frame size is not set
+Output #1, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #1:0(und): Video: h264 (High) (avc1 / 0x31637661), vaapi_vld(progressive), 960x540 [SAR 1:1 DAR 16:9], q=2-31, 1500 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:39.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 h264_vaapi
+  Stream #1:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+[h264_vaapi @ 0x5616c1b2c8c0] Driver does not support some wanted packed headers (wanted 0xd, found 0).
+[h264_vaapi @ 0x5616c1b2c8c0] Driver does not support packed sequence headers, but a global header is requested.
+[h264_vaapi @ 0x5616c1b2c8c0] No global header will be written: this may result in a stream which is not usable for some purposes (e.g. not muxable to some containers).
+[mp4 @ 0x5616c1b2b3c0] track 1: codec frame size is not set
+Output #2, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #2:0(und): Video: h264 (High) (avc1 / 0x31637661), vaapi_vld(progressive), 850x478 [SAR 3824:3825 DAR 16:9], q=2-31, 1000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:39.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 h264_vaapi
+  Stream #2:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+frame= 3926 fps=132 q=-0.0 q=-0.0 q=-0.0 size=   36864kB time=00:02:11.00 bitrate=2305.1kbits/s dup=6 drop=0 speed= 4.4x    
+16:52:24        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:52:54        all      0,47      0,00      3,51      0,18      0,00     95,83
+
+16:52:24      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:52:54            0      1253      0,68      2,30      4,59         0
+frame= 7834 fps=132 q=-0.0 q=-0.0 q=-0.0 size=   73728kB time=00:04:21.10 bitrate=2313.2kbits/s dup=6 drop=0 speed=4.39x    
+16:52:54        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:53:24        all      0,47      0,00      3,57      0,27      0,00     95,69
+
+16:52:54      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:53:24            0      1252      0,76      2,16      4,47         0
+frame=11883 fps=133 q=-0.0 q=-0.0 q=-0.0 size=  112128kB time=00:06:36.06 bitrate=2319.2kbits/s dup=6 drop=0 speed=4.42x    
+16:53:24        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:53:54        all      0,45      0,00      3,46      0,04      0,00     96,05
+
+16:53:24      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:53:54            1      1251      0,71      2,01      4,35         0
+frame=15897 fps=133 q=-0.0 q=-0.0 q=-0.0 size=  150272kB time=00:08:49.88 bitrate=2323.2kbits/s dup=6 drop=0 speed=4.42x    
+16:53:54        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:54:24        all      0,44      0,00      3,56      0,04      0,00     95,96
+
+16:53:54      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:54:24            0      1251      0,64      1,87      4,23         0
+frame=18217 fps=122 q=-0.0 q=-0.0 q=-0.0 size=  187392kB time=00:10:07.20 bitrate=2528.2kbits/s dup=6 drop=0 speed=4.05x    
+16:54:24        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:54:54        all      0,37      0,00      2,58      0,03      0,00     97,01
+
+16:54:24      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:54:54            0      1246      0,53      1,72      4,10         0
+[h264 @ 0x5616c1db7480] Invalid NAL unit size (1048643 > 67).=00:10:12.56 bitrate=2526.6kbits/s dup=6 drop=0 speed=4.03x    
+[h264 @ 0x5616c1db7480] Error splitting the input into NAL units.
+[h264 @ 0x5616c1e0fa80] Invalid NAL unit size (8392789 > 85).
+[h264 @ 0x5616c1e0fa80] Error splitting the input into NAL units.
+[h264 @ 0x5616c1e2c9c0] Invalid NAL unit size (166 > 132).
+[h264 @ 0x5616c1e2c9c0] Error splitting the input into NAL units.
+[h264 @ 0x5616c1e498c0] Invalid NAL unit size (268501071 > 103).
+[h264 @ 0x5616c1e498c0] Error splitting the input into NAL units.
+[h264 @ 0x5616c1e667c0] reference overflow 0 > 15 or 35 > 15
+[h264 @ 0x5616c1e667c0] decode_slice_header error
+[h264 @ 0x5616c1e667c0] no frame!
+[h264 @ 0x5616c1e836c0] Invalid NAL unit size (-2109734821 > 83).
+[h264 @ 0x5616c1e836c0] Error splitting the input into NAL units.
+[h264 @ 0x5616c1ea05c0] Invalid NAL unit size (671088719 > 79).
+[h264 @ 0x5616c1ea05c0] Error splitting the input into NAL units.
+[h264 @ 0x5616c1ebd4c0] Invalid NAL unit size (1179712 > 64).
+[h264 @ 0x5616c1ebd4c0] Error splitting the input into NAL units.
+[h264 @ 0x5616c1eda380] Invalid NAL unit size (16456 > 64).
+[h264 @ 0x5616c1eda380] Error splitting the input into NAL units.
+[h264 @ 0x5616c1ef7280] Invalid NAL unit size (2097493 > 85).
+[h264 @ 0x5616c1ef7280] Error splitting the input into NAL units.
+[h264 @ 0x5616c1f14180] Invalid NAL unit size (1048661 > 87).
+[h264 @ 0x5616c1f14180] Error splitting the input into NAL units.
+[h264 @ 0x5616c1f31080] Invalid NAL unit size (1048671 > 95).
+[h264 @ 0x5616c1f31080] Error splitting the input into NAL units.
+Error while decoding stream #0:0: Invalid data found when processing input
+    Last message repeated 3 times
+[h264 @ 0x5616c1e2c9c0] reference picture missing during reorder
+[h264 @ 0x5616c1e2c9c0] Missing reference picture, default is 65686
+Error while decoding stream #0:0: Invalid data found when processing input
+    Last message repeated 7 times
+[h264 @ 0x5616c1ef7280] Invalid NAL unit size (3244 > 3212).e=00:10:21.08 bitrate=2518.9kbits/s dup=42 drop=0 speed=4.01x    
+[h264 @ 0x5616c1ef7280] Error splitting the input into NAL units.
+Error while decoding stream #0:0: Invalid data found when processing input
+[h264 @ 0x5616c1ef7280] non-existing PPS 5 referenced4kB time=00:10:23.60 bitrate=2518.9kbits/s dup=45 drop=0 speed=   4x    
+[h264 @ 0x5616c1ef7280] decode_slice_header error
+[h264 @ 0x5616c1ef7280] no frame!
+[h264 @ 0x5616c1f14180] Invalid NAL unit size (16778990 > 750).
+[h264 @ 0x5616c1f14180] Error splitting the input into NAL units.
+[h264 @ 0x5616c1f31080] Invalid NAL unit size (134283534 > 782).
+[h264 @ 0x5616c1f31080] Error splitting the input into NAL units.
+[h264 @ 0x5616c1f4dec0] Invalid NAL unit size (1098908655 > 871).
+[h264 @ 0x5616c1f4dec0] Error splitting the input into NAL units.
+[h264 @ 0x5616c1db7480] Invalid NAL unit size (49737 > 589).
+[h264 @ 0x5616c1db7480] Error splitting the input into NAL units.
+[h264 @ 0x5616c1e0fa80] Invalid NAL unit size (1224744219 > 5435).
+[h264 @ 0x5616c1e0fa80] Error splitting the input into NAL units.
+[h264 @ 0x5616c1e2c9c0] Invalid NAL unit size (100861015 > 1111).
+[h264 @ 0x5616c1e2c9c0] Error splitting the input into NAL units.
+[h264 @ 0x5616c1e498c0] Invalid NAL unit size (1073742484 > 661).
+[h264 @ 0x5616c1e498c0] Error splitting the input into NAL units.
+[h264 @ 0x5616c1e667c0] Invalid NAL unit size (-2145385656 > 841).
+[h264 @ 0x5616c1e667c0] Error splitting the input into NAL units.
+[h264 @ 0x5616c1e836c0] co located POCs unavailable
+[h264 @ 0x5616c1eda380] mmco: unref short failure
+Error while decoding stream #0:0: Invalid data found when processing input
+    Last message repeated 8 times
+frame=19038 fps=119 q=-0.0 Lq=-0.0 q=-0.0 size=  195004kB time=00:10:34.56 bitrate=2517.4kbits/s dup=72 drop=0 speed=3.97x    
+video:375005kB audio:74314kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+
+real	2m40,038s
+user	0m6,691s
+sys	0m5,173s
+
+
+Average:        CPU     %user     %nice   %system   %iowait    %steal     %idle
+Average:        all      0,44      0,00      3,34      0,11      0,00     96,11
+
+Average:      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+Average:            0      1251      0,66      2,01      4,35         0
+```
+</details>
+
 ### Intel Quick Sync Video decoding/encoding on Intel i5-8250U (UHD 620)
 <details>
 <summary>Speed: 5.91x (time 1m47s), preset: medium</summary>
@@ -2479,6 +2975,412 @@ procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
  3  0      1   3000    531   9844    0    0     0     1 1925 5379 52  1 47  0  0
  0  0      1   4097    531   9844    0    0     0     0 1216 5460 28  1 71  0  0
  0  0      1   4098    531   9844    0    0     0     0  203  562  0  0 100  0  0
+```
+</details>
+
+### VAAPI decoding/encoding on AMD Ryzen 5600G
+
+<details>
+<summary>Speed: 2.92x (time 3m37s), preset: medium</summary>
+
+```
+$ sar -u -q 30 & time \
+ffmpeg -y -hwaccel vaapi -hwaccel_output_format vaapi -hwaccel_device /dev/dri/renderD128 -i bbb_sunflower_2160p_30fps_normal.mp4 \
+-c:a copy -vf scale_vaapi=w=-1:h=1080 -c:v h264_vaapi -b:v 4000k -preset medium -f mp4 /dev/null \
+-c:a copy -vf scale_vaapi=w=-1:h=720 -c:v h264_vaapi -b:v 2000k -preset medium -f mp4 /dev/null \
+-c:a copy -vf scale_vaapi=w=-1:h=478 -c:v h264_vaapi -b:v 1000k -preset medium -f mp4 /dev/null \
+; pkill -SIGINT sar
+[1] 33540
+Linux 5.15.0-41-generic (bzieba-desktop) 	12.07.2022 	_x86_64_	(12 CPU)
+ffmpeg version 4.4.2-0ubuntu0.22.04.1 Copyright (c) 2000-2021 the FFmpeg developers
+  built with gcc 11 (Ubuntu 11.2.0-19ubuntu1)
+  configuration: --prefix=/usr --extra-version=0ubuntu0.22.04.1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --arch=amd64 --enable-gpl --disable-stripping --enable-gnutls --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libjack --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librabbitmq --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-libzmq --enable-libzvbi --enable-lv2 --enable-omx --enable-openal --enable-opencl --enable-opengl --enable-sdl2 --enable-pocketsphinx --enable-librsvg --enable-libmfx --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libx264 --enable-shared
+  libavutil      56. 70.100 / 56. 70.100
+  libavcodec     58.134.100 / 58.134.100
+  libavformat    58. 76.100 / 58. 76.100
+  libavdevice    58. 13.100 / 58. 13.100
+  libavfilter     7.110.100 /  7.110.100
+  libswscale      5.  9.100 /  5.  9.100
+  libswresample   3.  9.100 /  3.  9.100
+  libpostproc    55.  9.100 / 55.  9.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'bbb_sunflower_2160p_30fps_normal.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    creation_time   : 2013-12-18T14:43:04.000000Z
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    composer        : Sacha Goedegebure
+  Duration: 00:10:34.53, start: 0.000000, bitrate: 7980 kb/s
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p, 3840x2160 [SAR 1:1 DAR 16:9], 7498 kb/s, 30 fps, 30 tbr, 30k tbn, 60 tbc (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:04.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+  Stream #0:1(und): Audio: mp3 (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 160 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+  Stream #0:2(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (h264_vaapi))
+  Stream #0:2 -> #0:1 (copy)
+  Stream #0:0 -> #1:0 (h264 (native) -> h264 (h264_vaapi))
+  Stream #0:2 -> #1:1 (copy)
+  Stream #0:0 -> #2:0 (h264 (native) -> h264 (h264_vaapi))
+  Stream #0:2 -> #2:1 (copy)
+Press [q] to stop, [?] for help
+[h264_vaapi @ 0x55ca06385d80] Driver does not support some wanted packed headers (wanted 0xd, found 0).
+[h264_vaapi @ 0x55ca06385d80] Driver does not support packed sequence headers, but a global header is requested.
+[h264_vaapi @ 0x55ca06385d80] No global header will be written: this may result in a stream which is not usable for some purposes (e.g. not muxable to some containers).
+[mp4 @ 0x55ca0635e6c0] track 1: codec frame size is not set
+Output #0, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), vaapi_vld(progressive), 1920x1080 [SAR 1:1 DAR 16:9], q=2-31, 4000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:04.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 h264_vaapi
+  Stream #0:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+[h264_vaapi @ 0x55ca0637c100] Driver does not support some wanted packed headers (wanted 0xd, found 0).
+[h264_vaapi @ 0x55ca0637c100] Driver does not support packed sequence headers, but a global header is requested.
+[h264_vaapi @ 0x55ca0637c100] No global header will be written: this may result in a stream which is not usable for some purposes (e.g. not muxable to some containers).
+[mp4 @ 0x55ca0637a8c0] track 1: codec frame size is not set
+Output #1, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #1:0(und): Video: h264 (High) (avc1 / 0x31637661), vaapi_vld(progressive), 1280x720 [SAR 1:1 DAR 16:9], q=2-31, 2000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:04.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 h264_vaapi
+  Stream #1:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+[h264_vaapi @ 0x55ca064c4f40] Driver does not support some wanted packed headers (wanted 0xd, found 0).
+[h264_vaapi @ 0x55ca064c4f40] Driver does not support packed sequence headers, but a global header is requested.
+[h264_vaapi @ 0x55ca064c4f40] No global header will be written: this may result in a stream which is not usable for some purposes (e.g. not muxable to some containers).
+[mp4 @ 0x55ca064c34c0] track 1: codec frame size is not set
+Output #2, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #2:0(und): Video: h264 (High) (avc1 / 0x31637661), vaapi_vld(progressive), 850x478 [SAR 3824:3825 DAR 16:9], q=2-31, 1000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:04.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 h264_vaapi
+  Stream #2:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+frame= 2553 fps= 87 q=-0.0 q=-0.0 q=-0.0 size=   44800kB time=00:01:25.06 bitrate=4314.3kbits/s dup=6 drop=0 speed=2.89x    
+16:57:13        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:57:43        all      0,45      0,00      3,21      0,04      0,00     96,30
+
+16:57:13      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:57:43            0      1248      0,26      1,07      3,45         0
+frame= 5243 fps= 88 q=-0.0 q=-0.0 q=-0.0 size=   92160kB time=00:02:54.73 bitrate=4320.7kbits/s dup=6 drop=0 speed=2.92x    
+16:57:43        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:58:13        all      0,42      0,00      3,22      0,06      0,00     96,29
+
+16:57:43      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:58:13            0      1244      0,55      1,06      3,37         0
+frame= 7856 fps= 88 q=-0.0 q=-0.0 q=-0.0 size=  137984kB time=00:04:22.04 bitrate=4313.6kbits/s dup=6 drop=0 speed=2.93x    
+16:58:13        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:58:43        all      0,40      0,00      3,32      0,13      0,00     96,16
+
+16:58:13      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:58:43            1      1242      0,46      0,99      3,27         0
+frame=10477 fps= 88 q=-0.0 q=-0.0 q=-0.0 size=  184576kB time=00:05:49.40 bitrate=4327.5kbits/s dup=6 drop=0 speed=2.93x    
+16:58:43        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:59:13        all      0,38      0,00      3,22      0,04      0,00     96,35
+
+16:58:43      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:59:13            1      1245      0,83      1,03      3,21         0
+frame=13130 fps= 88 q=-0.0 q=-0.0 q=-0.0 size=  232448kB time=00:07:17.72 bitrate=4350.2kbits/s dup=6 drop=0 speed=2.92x    
+16:59:13        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:59:43        all      0,46      0,00      3,30      0,05      0,00     96,20
+
+16:59:13      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:59:43            0      1245      0,75      0,99      3,12         0
+frame=15754 fps= 88 q=-0.0 q=-0.0 q=-0.0 size=  278272kB time=00:08:45.10 bitrate=4341.3kbits/s dup=6 drop=0 speed=2.92x    
+16:59:43        CPU     %user     %nice   %system   %iowait    %steal     %idle
+17:00:13        all      0,43      0,00      3,25      0,05      0,00     96,27
+
+16:59:43      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+17:00:13            1      1248      0,59      0,93      3,03         0
+frame=18358 fps= 88 q=-0.0 q=-0.0 q=-0.0 size=  358912kB time=00:10:11.96 bitrate=4804.5kbits/s dup=6 drop=0 speed=2.92x    
+17:00:13        CPU     %user     %nice   %system   %iowait    %steal     %idle
+17:00:43        all      0,47      0,00      3,23      0,06      0,00     96,24
+
+17:00:13      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+17:00:43            0      1248      0,61      0,90      2,96         0
+frame=19038 fps= 88 q=-0.0 Lq=-0.0 q=-0.0 size=  370229kB time=00:10:34.56 bitrate=4779.5kbits/s dup=6 drop=0 speed=2.92x    
+video:608249kB audio:74314kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+
+real	3m37,106s
+user	0m7,770s
+sys	0m5,618s
+
+
+Average:        CPU     %user     %nice   %system   %iowait    %steal     %idle
+Average:        all      0,43      0,00      3,25      0,06      0,00     96,26
+
+Average:      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+Average:            0      1246      0,58      1,00      3,20         0
+```
+</details>
+
+<details>
+<summary>Speed: 2.93x (time 3m37s), preset: veryfast</summary>
+
+```
+$ sar -u -q 30 & time \
+ffmpeg -y -hwaccel vaapi -hwaccel_output_format vaapi -hwaccel_device /dev/dri/renderD128 -i bbb_sunflower_2160p_30fps_normal.mp4 \
+-c:a copy -vf scale_vaapi=w=-1:h=1080 -c:v h264_vaapi -b:v 4000k -preset veryfast -f mp4 /dev/null \
+-c:a copy -vf scale_vaapi=w=-1:h=720 -c:v h264_vaapi -b:v 2000k -preset veryfast -f mp4 /dev/null \
+-c:a copy -vf scale_vaapi=w=-1:h=478 -c:v h264_vaapi -b:v 1000k -preset veryfast -f mp4 /dev/null \
+; pkill -SIGINT sar
+[1] 35685
+Linux 5.15.0-41-generic (bzieba-desktop) 	12.07.2022 	_x86_64_	(12 CPU)
+ffmpeg version 4.4.2-0ubuntu0.22.04.1 Copyright (c) 2000-2021 the FFmpeg developers
+  built with gcc 11 (Ubuntu 11.2.0-19ubuntu1)
+  configuration: --prefix=/usr --extra-version=0ubuntu0.22.04.1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --arch=amd64 --enable-gpl --disable-stripping --enable-gnutls --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libjack --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librabbitmq --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-libzmq --enable-libzvbi --enable-lv2 --enable-omx --enable-openal --enable-opencl --enable-opengl --enable-sdl2 --enable-pocketsphinx --enable-librsvg --enable-libmfx --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libx264 --enable-shared
+  libavutil      56. 70.100 / 56. 70.100
+  libavcodec     58.134.100 / 58.134.100
+  libavformat    58. 76.100 / 58. 76.100
+  libavdevice    58. 13.100 / 58. 13.100
+  libavfilter     7.110.100 /  7.110.100
+  libswscale      5.  9.100 /  5.  9.100
+  libswresample   3.  9.100 /  3.  9.100
+  libpostproc    55.  9.100 / 55.  9.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'bbb_sunflower_2160p_30fps_normal.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    creation_time   : 2013-12-18T14:43:04.000000Z
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    composer        : Sacha Goedegebure
+  Duration: 00:10:34.53, start: 0.000000, bitrate: 7980 kb/s
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p, 3840x2160 [SAR 1:1 DAR 16:9], 7498 kb/s, 30 fps, 30 tbr, 30k tbn, 60 tbc (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:04.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+  Stream #0:1(und): Audio: mp3 (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 160 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+  Stream #0:2(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (h264_vaapi))
+  Stream #0:2 -> #0:1 (copy)
+  Stream #0:0 -> #1:0 (h264 (native) -> h264 (h264_vaapi))
+  Stream #0:2 -> #1:1 (copy)
+  Stream #0:0 -> #2:0 (h264 (native) -> h264 (h264_vaapi))
+  Stream #0:2 -> #2:1 (copy)
+Press [q] to stop, [?] for help
+[h264_vaapi @ 0x55af88212d80] Driver does not support some wanted packed headers (wanted 0xd, found 0).
+[h264_vaapi @ 0x55af88212d80] Driver does not support packed sequence headers, but a global header is requested.
+[h264_vaapi @ 0x55af88212d80] No global header will be written: this may result in a stream which is not usable for some purposes (e.g. not muxable to some containers).
+[mp4 @ 0x55af881eb6c0] track 1: codec frame size is not set
+Output #0, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), vaapi_vld(progressive), 1920x1080 [SAR 1:1 DAR 16:9], q=2-31, 4000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:04.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 h264_vaapi
+  Stream #0:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+[h264_vaapi @ 0x55af88209100] Driver does not support some wanted packed headers (wanted 0xd, found 0).
+[h264_vaapi @ 0x55af88209100] Driver does not support packed sequence headers, but a global header is requested.
+[h264_vaapi @ 0x55af88209100] No global header will be written: this may result in a stream which is not usable for some purposes (e.g. not muxable to some containers).
+[mp4 @ 0x55af882078c0] track 1: codec frame size is not set
+Output #1, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #1:0(und): Video: h264 (High) (avc1 / 0x31637661), vaapi_vld(progressive), 1280x720 [SAR 1:1 DAR 16:9], q=2-31, 2000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:04.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 h264_vaapi
+  Stream #1:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+[h264_vaapi @ 0x55af88351f40] Driver does not support some wanted packed headers (wanted 0xd, found 0).
+[h264_vaapi @ 0x55af88351f40] Driver does not support packed sequence headers, but a global header is requested.
+[h264_vaapi @ 0x55af88351f40] No global header will be written: this may result in a stream which is not usable for some purposes (e.g. not muxable to some containers).
+[mp4 @ 0x55af883504c0] track 1: codec frame size is not set
+Output #2, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #2:0(und): Video: h264 (High) (avc1 / 0x31637661), vaapi_vld(progressive), 850x478 [SAR 3824:3825 DAR 16:9], q=2-31, 1000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:04.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 h264_vaapi
+  Stream #2:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+frame= 2604 fps= 87 q=-0.0 q=-0.0 q=-0.0 size=   45568kB time=00:01:26.84 bitrate=4298.2kbits/s dup=6 drop=0 speed= 2.9x    
+17:11:36        CPU     %user     %nice   %system   %iowait    %steal     %idle
+17:12:06        all      0,42      0,00      3,27      0,09      0,00     96,22
+
+17:11:36      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+17:12:06            1      1244      0,29      0,22      1,45         0
+frame= 5252 fps= 88 q=-0.0 q=-0.0 q=-0.0 size=   92160kB time=00:02:55.16 bitrate=4310.0kbits/s dup=6 drop=0 speed=2.93x    
+17:12:06        CPU     %user     %nice   %system   %iowait    %steal     %idle
+17:12:36        all      0,41      0,00      3,21      0,05      0,00     96,32
+
+17:12:06      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+17:12:36            2      1241      0,23      0,22      1,41         0
+frame= 7876 fps= 88 q=-0.0 q=-0.0 q=-0.0 size=  138496kB time=00:04:22.52 bitrate=4321.7kbits/s dup=6 drop=0 speed=2.93x    
+17:12:36        CPU     %user     %nice   %system   %iowait    %steal     %idle
+17:13:06        all      0,43      0,00      3,23      0,05      0,00     96,29
+
+17:12:36      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+17:13:06            2      1239      0,35      0,24      1,38         0
+frame=10540 fps= 88 q=-0.0 q=-0.0 q=-0.0 size=  185600kB time=00:05:51.32 bitrate=4327.7kbits/s dup=6 drop=0 speed=2.93x    
+17:13:06        CPU     %user     %nice   %system   %iowait    %steal     %idle
+17:13:36        all      0,45      0,00      3,31      0,03      0,00     96,21
+
+17:13:06      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+17:13:36            0      1243      0,35      0,25      1,34         0
+frame=13151 fps= 88 q=-0.0 q=-0.0 q=-0.0 size=  232704kB time=00:07:18.33 bitrate=4349.0kbits/s dup=6 drop=0 speed=2.93x    
+17:13:36        CPU     %user     %nice   %system   %iowait    %steal     %idle
+17:14:06        all      0,42      0,00      3,25      0,04      0,00     96,29
+
+17:13:36      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+17:14:06            1      1241      0,48      0,29      1,32         0
+frame=15779 fps= 88 q=-0.0 q=-0.0 q=-0.0 size=  278784kB time=00:08:46.04 bitrate=4341.4kbits/s dup=6 drop=0 speed=2.93x    
+17:14:06        CPU     %user     %nice   %system   %iowait    %steal     %idle
+17:14:36        all      0,44      0,00      3,23      0,04      0,00     96,29
+
+17:14:06      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+17:14:36            1      1241      0,44      0,30      1,29         0
+frame=18431 fps= 88 q=-0.0 q=-0.0 q=-0.0 size=  360192kB time=00:10:14.36 bitrate=4802.8kbits/s dup=6 drop=0 speed=2.93x    
+17:14:36        CPU     %user     %nice   %system   %iowait    %steal     %idle
+17:15:06        all      0,53      0,00      3,17      0,04      0,00     96,26
+
+17:14:36      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+17:15:06            0      1243      0,52      0,33      1,27         0
+frame=19038 fps= 88 q=-0.0 Lq=-0.0 q=-0.0 size=  370247kB time=00:10:34.56 bitrate=4779.7kbits/s dup=6 drop=0 speed=2.93x    
+video:608258kB audio:74314kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+
+real	3m36,688s
+user	0m7,811s
+sys	0m5,561s
+
+
+Average:        CPU     %user     %nice   %system   %iowait    %steal     %idle
+Average:        all      0,44      0,00      3,24      0,05      0,00     96,27
+
+Average:      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+Average:            1      1242      0,38      0,26      1,35         0
 ```
 </details>
 
