@@ -8,6 +8,647 @@ The reference source for every transcoding is a popular, open-source animation [
 ## Transcoding 1080p30 (H.264) to 720p, 540p, and 480p (H.264) simultaneously
 Sometimes, I had to set 478 px height, because of BBB ratio and `[libx264 @ 0x555bb8838fc0] width not divisible by 2 (853x480)` error.
 
+### Software decoding/encoding on AMD Ryzen 5600G
+
+<details>
+<summary>Speed: 3.66x (time 2m53s), preset: medium</summary>
+
+```
+$ sar -u -q 30 & time \
+ffmpeg -y -c:v h264 -i bbb_sunflower_1080p_30fps_normal.mp4 \
+-c:a copy -vf scale=-1:720 -c:v libx264 -b:v 2000k -preset medium -f mp4 /dev/null \
+-c:a copy -vf scale=-1:540 -c:v libx264 -b:v 1500k -preset medium -f mp4 /dev/null \
+-c:a copy -vf scale=-1:478 -c:v libx264 -b:v 1000k -preset medium -f mp4 /dev/null \
+; pkill -SIGINT sar
+[1] 27211
+Linux 5.15.0-41-generic (bzieba-desktop) 	12.07.2022 	_x86_64_	(12 CPU)
+ffmpeg version 4.4.2-0ubuntu0.22.04.1 Copyright (c) 2000-2021 the FFmpeg developers
+  built with gcc 11 (Ubuntu 11.2.0-19ubuntu1)
+  configuration: --prefix=/usr --extra-version=0ubuntu0.22.04.1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --arch=amd64 --enable-gpl --disable-stripping --enable-gnutls --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libjack --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librabbitmq --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-libzmq --enable-libzvbi --enable-lv2 --enable-omx --enable-openal --enable-opencl --enable-opengl --enable-sdl2 --enable-pocketsphinx --enable-librsvg --enable-libmfx --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libx264 --enable-shared
+  libavutil      56. 70.100 / 56. 70.100
+  libavcodec     58.134.100 / 58.134.100
+  libavformat    58. 76.100 / 58. 76.100
+  libavdevice    58. 13.100 / 58. 13.100
+  libavfilter     7.110.100 /  7.110.100
+  libswscale      5.  9.100 /  5.  9.100
+  libswresample   3.  9.100 /  3.  9.100
+  libpostproc    55.  9.100 / 55.  9.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'bbb_sunflower_1080p_30fps_normal.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    creation_time   : 2013-12-16T17:44:39.000000Z
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    composer        : Sacha Goedegebure
+  Duration: 00:10:34.53, start: 0.000000, bitrate: 3481 kb/s
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p, 1920x1080 [SAR 1:1 DAR 16:9], 2998 kb/s, 30 fps, 30 tbr, 30k tbn, 60 tbc (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:39.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+  Stream #0:1(und): Audio: mp3 (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 160 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+  Stream #0:2(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (libx264))
+  Stream #0:2 -> #0:1 (copy)
+  Stream #0:0 -> #1:0 (h264 (native) -> h264 (libx264))
+  Stream #0:2 -> #1:1 (copy)
+  Stream #0:0 -> #2:0 (h264 (native) -> h264 (libx264))
+  Stream #0:2 -> #2:1 (copy)
+Press [q] to stop, [?] for help
+[libx264 @ 0x559f26295040] using SAR=1/1
+[libx264 @ 0x559f26295040] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0x559f26295040] profile High, level 3.1, 4:2:0, 8-bit
+[libx264 @ 0x559f26295040] 264 - core 163 r3060 5db6aa6 - H.264/MPEG-4 AVC codec - Copyleft 2003-2021 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=18 lookahead_threads=3 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=abr mbtree=1 bitrate=2000 ratetol=1.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+[mp4 @ 0x559f26293700] track 1: codec frame size is not set
+Output #0, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #0:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 1280x720 [SAR 1:1 DAR 16:9], q=2-31, 2000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:39.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 libx264
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/2000000 buffer size: 0 vbv_delay: N/A
+  Stream #0:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+[libx264 @ 0x559f2632e540] using SAR=1/1
+[libx264 @ 0x559f2632e540] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0x559f2632e540] profile High, level 3.1, 4:2:0, 8-bit
+[libx264 @ 0x559f2632e540] 264 - core 163 r3060 5db6aa6 - H.264/MPEG-4 AVC codec - Copyleft 2003-2021 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=17 lookahead_threads=2 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=abr mbtree=1 bitrate=1500 ratetol=1.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+[mp4 @ 0x559f2632d340] track 1: codec frame size is not set
+Output #1, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #1:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 960x540 [SAR 1:1 DAR 16:9], q=2-31, 1500 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:39.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 libx264
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/1500000 buffer size: 0 vbv_delay: N/A
+  Stream #1:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+[libx264 @ 0x559f2627bbc0] using SAR=3824/3825
+[libx264 @ 0x559f2627bbc0] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0x559f2627bbc0] profile High, level 3.1, 4:2:0, 8-bit
+[libx264 @ 0x559f2627bbc0] 264 - core 163 r3060 5db6aa6 - H.264/MPEG-4 AVC codec - Copyleft 2003-2021 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=15 lookahead_threads=2 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=abr mbtree=1 bitrate=1000 ratetol=1.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+[mp4 @ 0x559f26289f00] track 1: codec frame size is not set
+Output #2, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #2:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 850x478 [SAR 3824:3825 DAR 16:9], q=2-31, 1000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:39.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 libx264
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/1000000 buffer size: 0 vbv_delay: N/A
+  Stream #2:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+frame= 3292 fps=110 q=23.0 q=21.0 q=23.0 size=   28928kB time=00:01:49.88 bitrate=2156.5kbits/s dup=6 drop=0 speed=3.68x    
+16:24:31        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:25:01        all     22,83     60,37      0,89      0,01      0,00     15,90
+
+16:24:31      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:25:01           16      1282      5,60      3,99      4,19         0
+frame= 6708 fps=113 q=26.0 q=25.0 q=27.0 size=   63232kB time=00:03:43.64 bitrate=2316.1kbits/s dup=6 drop=0 speed=3.75x    
+16:25:01        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:25:31        all     21,45     60,41      0,81      0,01      0,00     17,31
+
+16:25:01      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:25:31            9      1285     11,65      5,69      4,75         0
+frame=10066 fps=112 q=28.0 q=27.0 q=28.0 size=   97024kB time=00:05:35.48 bitrate=2369.1kbits/s dup=6 drop=0 speed=3.73x    
+16:25:31        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:26:01        all     22,02     61,70      0,79      0,03      0,00     15,46
+
+16:25:31      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:26:01           10      1287     15,98      7,31      5,32         0
+frame=13276 fps=111 q=29.0 q=28.0 q=30.0 size=  128768kB time=00:07:22.52 bitrate=2383.7kbits/s dup=6 drop=0 speed= 3.7x    
+16:26:01        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:26:31        all     22,68     60,77      0,83      0,00      0,00     15,72
+
+16:26:01      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:26:31           11      1285     16,97      8,34      5,73         0
+frame=16376 fps=110 q=28.0 q=27.0 q=28.0 size=  156160kB time=00:09:05.72 bitrate=2344.1kbits/s dup=6 drop=0 speed=3.65x    
+16:26:31        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:27:01        all     23,43     63,28      0,80      0,00      0,00     12,48
+
+16:26:31      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:27:01            9      1284     19,52      9,72      6,27         0
+[h264 @ 0x559f2652eb40] concealing 2738 DC, 2738 AC, 2738 MV errors in P frameate=2395.4kbits/s dup=6 drop=0 speed=3.63x    
+[h264 @ 0x559f262803c0] Invalid NAL unit size (1048643 > 67).
+[h264 @ 0x559f262803c0] Error splitting the input into NAL units.
+[h264 @ 0x559f262fc580] Invalid NAL unit size (8392789 > 85).
+[h264 @ 0x559f262fc580] Error splitting the input into NAL units.
+[h264 @ 0x559f2640de40] Invalid NAL unit size (166 > 132).
+[h264 @ 0x559f2640de40] Error splitting the input into NAL units.
+[h264 @ 0x559f2642ab00] Invalid NAL unit size (268501071 > 103).
+[h264 @ 0x559f2642ab00] Error splitting the input into NAL units.
+[h264 @ 0x559f264478c0] reference overflow 0 > 15 or 35 > 15
+[h264 @ 0x559f264478c0] decode_slice_header error
+[h264 @ 0x559f264478c0] no frame!
+[h264 @ 0x559f26464600] Invalid NAL unit size (-2109734821 > 83).
+[h264 @ 0x559f26464600] Error splitting the input into NAL units.
+[h264 @ 0x559f26481400] Invalid NAL unit size (671088719 > 79).
+[h264 @ 0x559f26481400] Error splitting the input into NAL units.
+[h264 @ 0x559f2649e1c0] Invalid NAL unit size (1179712 > 64).
+[h264 @ 0x559f2649e1c0] Error splitting the input into NAL units.
+[h264 @ 0x559f264bb080] Invalid NAL unit size (16456 > 64).
+[h264 @ 0x559f264bb080] Error splitting the input into NAL units.
+[h264 @ 0x559f264d7ec0] Invalid NAL unit size (2097493 > 85).
+[h264 @ 0x559f264d7ec0] Error splitting the input into NAL units.
+[h264 @ 0x559f264f4dc0] Invalid NAL unit size (1048661 > 87).
+[h264 @ 0x559f264f4dc0] Error splitting the input into NAL units.
+[h264 @ 0x559f26511c80] Invalid NAL unit size (1048671 > 95).
+[h264 @ 0x559f26511c80] Error splitting the input into NAL units.
+Error while decoding stream #0:0: Invalid data found when processing input
+    Last message repeated 3 times
+[h264 @ 0x559f2640de40] reference picture missing during reorder
+[h264 @ 0x559f2640de40] Missing reference picture, default is 65686
+Error while decoding stream #0:0: Invalid data found when processing input
+    Last message repeated 7 times
+bbb_sunflower_1080p_30fps_normal.mp4: corrupt decoded frame in stream 0
+[h264 @ 0x559f26481400] concealing 4138 DC, 4138 AC, 4138 MV errors in B frameate=2365.4kbits/s dup=42 drop=0 speed=3.65x    
+bbb_sunflower_1080p_30fps_normal.mp4: corrupt decoded frame in stream 0
+[h264 @ 0x559f264bb080] Reference 2 >= 2
+[h264 @ 0x559f264bb080] error while decoding MB 85 8, bytestream 3028
+[h264 @ 0x559f264bb080] concealing 7164 DC, 7164 AC, 7164 MV errors in B frame
+[h264 @ 0x559f264d7ec0] Invalid NAL unit size (3244 > 3212).
+[h264 @ 0x559f264d7ec0] Error splitting the input into NAL units.
+bbb_sunflower_1080p_30fps_normal.mp4: corrupt decoded frame in stream 0
+Error while decoding stream #0:0: Invalid data found when processing input
+[h264 @ 0x559f2652eb40] Reference 5 >= 4 size=  179456kB time=00:10:23.00 bitrate=2359.7kbits/s dup=45 drop=0 speed=3.65x    
+[h264 @ 0x559f2652eb40] error while decoding MB 71 55, bytestream 1283
+[h264 @ 0x559f2652eb40] concealing 1538 DC, 1538 AC, 1538 MV errors in P frame
+bbb_sunflower_1080p_30fps_normal.mp4: corrupt decoded frame in stream 0
+[h264 @ 0x559f264bb080] concealing 2079 DC, 2079 AC, 2079 MV errors in P frame
+[h264 @ 0x559f264d7ec0] non-existing PPS 5 referenced
+[h264 @ 0x559f264d7ec0] decode_slice_header error
+[h264 @ 0x559f264d7ec0] no frame!
+[h264 @ 0x559f264f4dc0] Invalid NAL unit size (16778990 > 750).
+[h264 @ 0x559f264f4dc0] Error splitting the input into NAL units.
+[h264 @ 0x559f26511c80] Invalid NAL unit size (134283534 > 782).
+[h264 @ 0x559f26511c80] Error splitting the input into NAL units.
+[h264 @ 0x559f2652eb40] Invalid NAL unit size (1098908655 > 871).
+[h264 @ 0x559f2652eb40] Error splitting the input into NAL units.
+[h264 @ 0x559f262803c0] Invalid NAL unit size (49737 > 589).
+[h264 @ 0x559f262803c0] Error splitting the input into NAL units.
+[h264 @ 0x559f262fc580] Invalid NAL unit size (1224744219 > 5435).
+[h264 @ 0x559f262fc580] Error splitting the input into NAL units.
+[h264 @ 0x559f2640de40] Invalid NAL unit size (100861015 > 1111).
+[h264 @ 0x559f2640de40] Error splitting the input into NAL units.
+[h264 @ 0x559f2642ab00] Invalid NAL unit size (1073742484 > 661).
+[h264 @ 0x559f2642ab00] Error splitting the input into NAL units.
+[h264 @ 0x559f264478c0] Invalid NAL unit size (-2145385656 > 841).
+[h264 @ 0x559f264478c0] Error splitting the input into NAL units.
+[h264 @ 0x559f26464600] co located POCs unavailable
+[h264 @ 0x559f264bb080] mmco: unref short failure
+Error while decoding stream #0:0: Invalid data found when processing input
+    Last message repeated 8 times
+bbb_sunflower_1080p_30fps_normal.mp4: corrupt decoded frame in stream 0
+frame=19038 fps=110 q=-1.0 Lq=-1.0 q=-1.0 size=  181729kB time=00:10:34.50 bitrate=2346.3kbits/s dup=72 drop=0 speed=3.66x    
+video:351446kB audio:74314kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+[libx264 @ 0x559f26295040] frame I:168   Avg QP:15.00  size:151797
+[libx264 @ 0x559f26295040] frame P:6228  Avg QP:20.19  size: 15691
+[libx264 @ 0x559f26295040] frame B:12642 Avg QP:24.79  size:  2929
+[libx264 @ 0x559f26295040] consecutive B-frames:  5.1% 16.9%  6.5% 71.5%
+[libx264 @ 0x559f26295040] mb I  I16..4:  8.9% 63.6% 27.5%
+[libx264 @ 0x559f26295040] mb P  I16..4:  1.1%  5.1%  0.9%  P16..4: 26.6% 10.7%  7.3%  0.0%  0.0%    skip:48.2%
+[libx264 @ 0x559f26295040] mb B  I16..4:  0.1%  0.6%  0.2%  B16..8: 21.7%  2.2%  0.5%  direct: 1.0%  skip:73.7%  L0:40.6% L1:53.3% BI: 6.1%
+[libx264 @ 0x559f26295040] final ratefactor: 20.82
+[libx264 @ 0x559f26295040] 8x8 transform intra:69.5% inter:66.2%
+[libx264 @ 0x559f26295040] coded y,uvDC,uvAC intra: 64.1% 68.0% 42.6% inter: 8.6% 7.9% 1.2%
+[libx264 @ 0x559f26295040] i16 v,h,dc,p: 32% 25%  6% 38%
+[libx264 @ 0x559f26295040] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 21% 16% 17%  5%  8% 11%  8%  7%  7%
+[libx264 @ 0x559f26295040] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 22% 17% 12%  6% 11% 11%  9%  7%  6%
+[libx264 @ 0x559f26295040] i8c dc,h,v,p: 51% 22% 17% 10%
+[libx264 @ 0x559f26295040] Weighted P-Frames: Y:2.7% UV:1.7%
+[libx264 @ 0x559f26295040] ref P L0: 63.0% 16.1% 15.6%  5.2%  0.0%
+[libx264 @ 0x559f26295040] ref B L0: 87.6%  9.7%  2.8%
+[libx264 @ 0x559f26295040] ref B L1: 95.9%  4.1%
+[libx264 @ 0x559f26295040] kb/s:2020.17
+[libx264 @ 0x559f2632e540] frame I:168   Avg QP:14.12  size:110491
+[libx264 @ 0x559f2632e540] frame P:6154  Avg QP:19.18  size: 11616
+[libx264 @ 0x559f2632e540] frame B:12716 Avg QP:24.35  size:  2342
+[libx264 @ 0x559f2632e540] consecutive B-frames:  6.6%  9.8%  9.2% 74.3%
+[libx264 @ 0x559f2632e540] mb I  I16..4:  8.7% 49.6% 41.7%
+[libx264 @ 0x559f2632e540] mb P  I16..4:  0.9%  4.3%  1.3%  P16..4: 24.3% 12.3%  9.9%  0.0%  0.0%    skip:47.0%
+[libx264 @ 0x559f2632e540] mb B  I16..4:  0.1%  0.6%  0.2%  B16..8: 21.5%  3.3%  1.1%  direct: 1.8%  skip:71.5%  L0:40.5% L1:50.6% BI: 8.9%
+[libx264 @ 0x559f2632e540] final ratefactor: 19.62
+[libx264 @ 0x559f2632e540] 8x8 transform intra:61.3% inter:62.4%
+[libx264 @ 0x559f2632e540] coded y,uvDC,uvAC intra: 69.7% 74.0% 50.5% inter: 10.3% 9.0% 1.9%
+[libx264 @ 0x559f2632e540] i16 v,h,dc,p: 34% 29%  9% 29%
+[libx264 @ 0x559f2632e540] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 20% 17% 17%  5%  7% 10%  7%  7%  8%
+[libx264 @ 0x559f2632e540] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 21% 16% 11%  6% 10% 10%  9%  8%  7%
+[libx264 @ 0x559f2632e540] i8c dc,h,v,p: 52% 22% 17%  9%
+[libx264 @ 0x559f2632e540] Weighted P-Frames: Y:4.8% UV:2.4%
+[libx264 @ 0x559f2632e540] ref P L0: 61.8% 15.3% 14.5%  8.1%  0.3%
+[libx264 @ 0x559f2632e540] ref B L0: 82.0% 14.2%  3.9%
+[libx264 @ 0x559f2632e540] ref B L1: 91.6%  8.4%
+[libx264 @ 0x559f2632e540] kb/s:1510.58
+[libx264 @ 0x559f2627bbc0] frame I:169   Avg QP:16.07  size: 78110
+[libx264 @ 0x559f2627bbc0] frame P:6139  Avg QP:21.09  size:  7548
+[libx264 @ 0x559f2627bbc0] frame B:12730 Avg QP:26.29  size:  1592
+[libx264 @ 0x559f2627bbc0] consecutive B-frames:  6.9%  8.2% 10.7% 74.2%
+[libx264 @ 0x559f2627bbc0] mb I  I16..4:  8.6% 58.4% 33.0%
+[libx264 @ 0x559f2627bbc0] mb P  I16..4:  0.8%  3.8%  1.1%  P16..4: 25.0% 10.5%  7.6%  0.0%  0.0%    skip:51.2%
+[libx264 @ 0x559f2627bbc0] mb B  I16..4:  0.1%  0.5%  0.2%  B16..8: 22.3%  2.7%  0.8%  direct: 1.5%  skip:72.0%  L0:41.2% L1:51.6% BI: 7.2%
+[libx264 @ 0x559f2627bbc0] final ratefactor: 21.37
+[libx264 @ 0x559f2627bbc0] 8x8 transform intra:63.7% inter:63.5%
+[libx264 @ 0x559f2627bbc0] coded y,uvDC,uvAC intra: 68.6% 72.8% 49.7% inter: 8.8% 7.6% 1.5%
+[libx264 @ 0x559f2627bbc0] i16 v,h,dc,p: 31% 30%  7% 32%
+[libx264 @ 0x559f2627bbc0] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 18% 18% 17%  5%  8% 11%  8%  8%  8%
+[libx264 @ 0x559f2627bbc0] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 18% 20% 12%  6% 10% 10%  9%  7%  7%
+[libx264 @ 0x559f2627bbc0] i8c dc,h,v,p: 50% 24% 16% 10%
+[libx264 @ 0x559f2627bbc0] Weighted P-Frames: Y:3.6% UV:2.0%
+[libx264 @ 0x559f2627bbc0] ref P L0: 62.9% 16.5% 12.0%  8.3%  0.3%
+[libx264 @ 0x559f2627bbc0] ref B L0: 79.0% 15.2%  5.8%
+[libx264 @ 0x559f2627bbc0] ref B L1: 90.9%  9.1%
+[libx264 @ 0x559f2627bbc0] kb/s:1006.00
+
+real	2m53,453s
+user	28m55,867s
+sys	0m11,633s
+
+
+Average:        CPU     %user     %nice   %system   %iowait    %steal     %idle
+Average:        all     22,48     61,31      0,82      0,01      0,00     15,37
+
+Average:      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+Average:           11      1285     13,94      7,01      5,25         0
+```
+</details>
+
+<details>
+<summary>Speed: 5.23x (time 2m1s), preset: veryfast</summary>
+
+```
+$ sar -u -q 30 & time \
+ffmpeg -y -c:v h264 -i bbb_sunflower_1080p_30fps_normal.mp4 \
+-c:a copy -vf scale=-1:720 -c:v libx264 -b:v 2000k -preset veryfast -f mp4 /dev/null \
+-c:a copy -vf scale=-1:540 -c:v libx264 -b:v 1500k -preset veryfast -f mp4 /dev/null \
+-c:a copy -vf scale=-1:478 -c:v libx264 -b:v 1000k -preset veryfast -f mp4 /dev/null \
+; pkill -SIGINT sar
+[1] 28180
+Linux 5.15.0-41-generic (bzieba-desktop) 	12.07.2022 	_x86_64_	(12 CPU)
+ffmpeg version 4.4.2-0ubuntu0.22.04.1 Copyright (c) 2000-2021 the FFmpeg developers
+  built with gcc 11 (Ubuntu 11.2.0-19ubuntu1)
+  configuration: --prefix=/usr --extra-version=0ubuntu0.22.04.1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --arch=amd64 --enable-gpl --disable-stripping --enable-gnutls --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libjack --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librabbitmq --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-libzmq --enable-libzvbi --enable-lv2 --enable-omx --enable-openal --enable-opencl --enable-opengl --enable-sdl2 --enable-pocketsphinx --enable-librsvg --enable-libmfx --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libx264 --enable-shared
+  libavutil      56. 70.100 / 56. 70.100
+  libavcodec     58.134.100 / 58.134.100
+  libavformat    58. 76.100 / 58. 76.100
+  libavdevice    58. 13.100 / 58. 13.100
+  libavfilter     7.110.100 /  7.110.100
+  libswscale      5.  9.100 /  5.  9.100
+  libswresample   3.  9.100 /  3.  9.100
+  libpostproc    55.  9.100 / 55.  9.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'bbb_sunflower_1080p_30fps_normal.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    creation_time   : 2013-12-16T17:44:39.000000Z
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    composer        : Sacha Goedegebure
+  Duration: 00:10:34.53, start: 0.000000, bitrate: 3481 kb/s
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p, 1920x1080 [SAR 1:1 DAR 16:9], 2998 kb/s, 30 fps, 30 tbr, 30k tbn, 60 tbc (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:39.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+  Stream #0:1(und): Audio: mp3 (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 160 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+  Stream #0:2(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (libx264))
+  Stream #0:2 -> #0:1 (copy)
+  Stream #0:0 -> #1:0 (h264 (native) -> h264 (libx264))
+  Stream #0:2 -> #1:1 (copy)
+  Stream #0:0 -> #2:0 (h264 (native) -> h264 (libx264))
+  Stream #0:2 -> #2:1 (copy)
+Press [q] to stop, [?] for help
+[libx264 @ 0x5653e2186040] using SAR=1/1
+[libx264 @ 0x5653e2186040] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0x5653e2186040] profile High, level 3.1, 4:2:0, 8-bit
+[libx264 @ 0x5653e2186040] 264 - core 163 r3060 5db6aa6 - H.264/MPEG-4 AVC codec - Copyleft 2003-2021 - http://www.videolan.org/x264.html - options: cabac=1 ref=1 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=2 psy=1 psy_rd=1.00:0.00 mixed_ref=0 me_range=16 chroma_me=1 trellis=0 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=0 threads=18 lookahead_threads=5 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=1 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=10 rc=abr mbtree=1 bitrate=2000 ratetol=1.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+[mp4 @ 0x5653e2184700] track 1: codec frame size is not set
+Output #0, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #0:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 1280x720 [SAR 1:1 DAR 16:9], q=2-31, 2000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:39.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 libx264
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/2000000 buffer size: 0 vbv_delay: N/A
+  Stream #0:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+[libx264 @ 0x5653e221f540] using SAR=1/1
+[libx264 @ 0x5653e221f540] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0x5653e221f540] profile High, level 3.1, 4:2:0, 8-bit
+[libx264 @ 0x5653e221f540] 264 - core 163 r3060 5db6aa6 - H.264/MPEG-4 AVC codec - Copyleft 2003-2021 - http://www.videolan.org/x264.html - options: cabac=1 ref=1 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=2 psy=1 psy_rd=1.00:0.00 mixed_ref=0 me_range=16 chroma_me=1 trellis=0 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=0 threads=17 lookahead_threads=4 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=1 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=10 rc=abr mbtree=1 bitrate=1500 ratetol=1.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+[mp4 @ 0x5653e221e340] track 1: codec frame size is not set
+Output #1, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #1:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 960x540 [SAR 1:1 DAR 16:9], q=2-31, 1500 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:39.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 libx264
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/1500000 buffer size: 0 vbv_delay: N/A
+  Stream #1:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+[libx264 @ 0x5653e216cbc0] using SAR=3824/3825
+[libx264 @ 0x5653e216cbc0] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0x5653e216cbc0] profile High, level 3.1, 4:2:0, 8-bit
+[libx264 @ 0x5653e216cbc0] 264 - core 163 r3060 5db6aa6 - H.264/MPEG-4 AVC codec - Copyleft 2003-2021 - http://www.videolan.org/x264.html - options: cabac=1 ref=1 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=2 psy=1 psy_rd=1.00:0.00 mixed_ref=0 me_range=16 chroma_me=1 trellis=0 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=0 threads=15 lookahead_threads=3 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=1 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=10 rc=abr mbtree=1 bitrate=1000 ratetol=1.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+[mp4 @ 0x5653e217af00] track 1: codec frame size is not set
+Output #2, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #2:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 850x478 [SAR 3824:3825 DAR 16:9], q=2-31, 1000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:39.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 libx264
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/1000000 buffer size: 0 vbv_delay: N/A
+  Stream #2:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-16T17:44:42.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+frame= 4725 fps=159 q=23.0 q=22.0 q=24.0 size=   43776kB time=00:02:37.40 bitrate=2278.2kbits/s dup=6 drop=0 speed= 5.3x    
+16:29:11        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:29:41        all     28,30     21,57      1,07      0,03      0,00     49,03
+
+16:29:11      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:29:41            6      1303      7,63      8,30      6,29         0
+frame= 9542 fps=159 q=26.0 q=24.0 q=26.0 size=   91136kB time=00:05:18.20 bitrate=2346.2kbits/s dup=6 drop=0 speed=5.31x    
+16:29:41        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:30:11        all     27,33     21,67      1,12      0,05      0,00     49,83
+
+16:29:41      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:30:11           10      1297      6,77      8,02      6,26         0
+frame=14170 fps=158 q=28.0 q=27.0 q=29.0 size=  137216kB time=00:07:52.28 bitrate=2380.1kbits/s dup=6 drop=0 speed=5.27x    
+16:30:11        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:30:41        all     29,70     23,06      1,04      0,00      0,00     46,19
+
+16:30:11      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:30:41           25      1298      8,34      8,25      6,39         0
+[h264 @ 0x5653e241fb40] concealing 2738 DC, 2738 AC, 2738 MV errors in P frameate=2399.2kbits/s dup=6 drop=0 speed=5.21x    
+[h264 @ 0x5653e21713c0] Invalid NAL unit size (1048643 > 67).
+[h264 @ 0x5653e21713c0] Error splitting the input into NAL units.
+[h264 @ 0x5653e21ed580] Invalid NAL unit size (8392789 > 85).
+[h264 @ 0x5653e21ed580] Error splitting the input into NAL units.
+[h264 @ 0x5653e22fee40] Invalid NAL unit size (166 > 132).
+[h264 @ 0x5653e22fee40] Error splitting the input into NAL units.
+[h264 @ 0x5653e231bb00] Invalid NAL unit size (268501071 > 103).
+[h264 @ 0x5653e231bb00] Error splitting the input into NAL units.
+[h264 @ 0x5653e23388c0] reference overflow 0 > 15 or 35 > 15
+[h264 @ 0x5653e23388c0] decode_slice_header error
+[h264 @ 0x5653e23388c0] no frame!
+[h264 @ 0x5653e2355600] Invalid NAL unit size (-2109734821 > 83).
+[h264 @ 0x5653e2355600] Error splitting the input into NAL units.
+[h264 @ 0x5653e2372400] Invalid NAL unit size (671088719 > 79).
+[h264 @ 0x5653e2372400] Error splitting the input into NAL units.
+[h264 @ 0x5653e238f1c0] Invalid NAL unit size (1179712 > 64).
+[h264 @ 0x5653e238f1c0] Error splitting the input into NAL units.
+[h264 @ 0x5653e23ac080] Invalid NAL unit size (16456 > 64).
+[h264 @ 0x5653e23ac080] Error splitting the input into NAL units.
+[h264 @ 0x5653e23c8ec0] Invalid NAL unit size (2097493 > 85).
+[h264 @ 0x5653e23c8ec0] Error splitting the input into NAL units.
+[h264 @ 0x5653e23e5dc0] Invalid NAL unit size (1048661 > 87).
+[h264 @ 0x5653e23e5dc0] Error splitting the input into NAL units.
+[h264 @ 0x5653e2402c80] Invalid NAL unit size (1048671 > 95).
+[h264 @ 0x5653e2402c80] Error splitting the input into NAL units.
+Error while decoding stream #0:0: Invalid data found when processing input
+    Last message repeated 3 times
+[h264 @ 0x5653e22fee40] reference picture missing during reorder
+[h264 @ 0x5653e22fee40] Missing reference picture, default is 65686
+Error while decoding stream #0:0: Invalid data found when processing input
+    Last message repeated 7 times
+bbb_sunflower_1080p_30fps_normal.mp4: corrupt decoded frame in stream 0
+[h264 @ 0x5653e2372400] concealing 4138 DC, 4138 AC, 4138 MV errors in B frameate=2365.4kbits/s dup=42 drop=0 speed=5.22x    
+bbb_sunflower_1080p_30fps_normal.mp4: corrupt decoded frame in stream 0
+[h264 @ 0x5653e23ac080] Reference 2 >= 2
+[h264 @ 0x5653e23ac080] error while decoding MB 85 8, bytestream 3028
+[h264 @ 0x5653e23ac080] concealing 7164 DC, 7164 AC, 7164 MV errors in B frame
+[h264 @ 0x5653e23c8ec0] Invalid NAL unit size (3244 > 3212).
+[h264 @ 0x5653e23c8ec0] Error splitting the input into NAL units.
+bbb_sunflower_1080p_30fps_normal.mp4: corrupt decoded frame in stream 0
+Error while decoding stream #0:0: Invalid data found when processing input
+[h264 @ 0x5653e241fb40] Reference 5 >= 4 size=  179712kB time=00:10:23.48 bitrate=2361.2kbits/s dup=45 drop=0 speed=5.23x    
+[h264 @ 0x5653e241fb40] error while decoding MB 71 55, bytestream 1283
+[h264 @ 0x5653e241fb40] concealing 1538 DC, 1538 AC, 1538 MV errors in P frame
+bbb_sunflower_1080p_30fps_normal.mp4: corrupt decoded frame in stream 0
+[h264 @ 0x5653e23ac080] concealing 2079 DC, 2079 AC, 2079 MV errors in P frame
+[h264 @ 0x5653e23c8ec0] non-existing PPS 5 referenced
+[h264 @ 0x5653e23c8ec0] decode_slice_header error
+[h264 @ 0x5653e23c8ec0] no frame!
+[h264 @ 0x5653e23e5dc0] Invalid NAL unit size (16778990 > 750).
+[h264 @ 0x5653e23e5dc0] Error splitting the input into NAL units.
+[h264 @ 0x5653e2402c80] Invalid NAL unit size (134283534 > 782).
+[h264 @ 0x5653e2402c80] Error splitting the input into NAL units.
+[h264 @ 0x5653e241fb40] Invalid NAL unit size (1098908655 > 871).
+[h264 @ 0x5653e241fb40] Error splitting the input into NAL units.
+[h264 @ 0x5653e21713c0] Invalid NAL unit size (49737 > 589).
+[h264 @ 0x5653e21713c0] Error splitting the input into NAL units.
+[h264 @ 0x5653e21ed580] Invalid NAL unit size (1224744219 > 5435).
+[h264 @ 0x5653e21ed580] Error splitting the input into NAL units.
+[h264 @ 0x5653e22fee40] Invalid NAL unit size (100861015 > 1111).
+[h264 @ 0x5653e22fee40] Error splitting the input into NAL units.
+[h264 @ 0x5653e231bb00] Invalid NAL unit size (1073742484 > 661).
+[h264 @ 0x5653e231bb00] Error splitting the input into NAL units.
+[h264 @ 0x5653e23388c0] Invalid NAL unit size (-2145385656 > 841).
+[h264 @ 0x5653e23388c0] Error splitting the input into NAL units.
+[h264 @ 0x5653e2355600] co located POCs unavailable
+[h264 @ 0x5653e23ac080] mmco: unref short failure
+Error while decoding stream #0:0: Invalid data found when processing input
+    Last message repeated 8 times
+bbb_sunflower_1080p_30fps_normal.mp4: corrupt decoded frame in stream 0
+frame=18794 fps=157 q=27.0 q=27.0 q=28.0 size=  179968kB time=00:10:26.36 bitrate=2353.7kbits/s dup=72 drop=0 speed=5.23x    
+16:30:41        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:31:11        all     31,63     22,32      1,02      0,03      0,00     45,01
+
+16:30:41      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:31:11            1      1304      7,40      8,03      6,38         0
+frame=19038 fps=157 q=-1.0 Lq=-1.0 q=-1.0 size=  181795kB time=00:10:34.50 bitrate=2347.1kbits/s dup=72 drop=0 speed=5.23x    
+video:352296kB audio:74314kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+[libx264 @ 0x5653e2186040] frame I:167   Avg QP:15.13  size:139392
+[libx264 @ 0x5653e2186040] frame P:6380  Avg QP:20.03  size: 15907
+[libx264 @ 0x5653e2186040] frame B:12491 Avg QP:23.11  size:  2847
+[libx264 @ 0x5653e2186040] consecutive B-frames:  5.5% 18.6%  7.0% 68.8%
+[libx264 @ 0x5653e2186040] mb I  I16..4: 16.8% 17.2% 66.0%
+[libx264 @ 0x5653e2186040] mb P  I16..4:  3.4%  5.5%  2.2%  P16..4: 26.3%  8.6%  5.1%  0.0%  0.0%    skip:48.9%
+[libx264 @ 0x5653e2186040] mb B  I16..4:  0.4%  0.8%  0.3%  B16..8:  7.0%  2.7%  0.5%  direct: 2.8%  skip:85.6%  L0:34.6% L1:45.6% BI:19.9%
+[libx264 @ 0x5653e2186040] final ratefactor: 19.57
+[libx264 @ 0x5653e2186040] 8x8 transform intra:45.4% inter:32.3%
+[libx264 @ 0x5653e2186040] coded y,uvDC,uvAC intra: 63.3% 58.8% 30.7% inter: 7.1% 6.1% 0.8%
+[libx264 @ 0x5653e2186040] i16 v,h,dc,p: 50% 23% 13% 13%
+[libx264 @ 0x5653e2186040] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 22% 18% 17%  5%  7% 14%  7%  6%  6%
+[libx264 @ 0x5653e2186040] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 21% 17% 11%  7% 10% 11%  8%  9%  8%
+[libx264 @ 0x5653e2186040] i8c dc,h,v,p: 51% 21% 18%  9%
+[libx264 @ 0x5653e2186040] Weighted P-Frames: Y:2.4% UV:1.5%
+[libx264 @ 0x5653e2186040] kb/s:2021.04
+[libx264 @ 0x5653e221f540] frame I:168   Avg QP:14.44  size: 99226
+[libx264 @ 0x5653e221f540] frame P:6264  Avg QP:19.40  size: 11660
+[libx264 @ 0x5653e221f540] frame B:12606 Avg QP:23.16  size:  2445
+[libx264 @ 0x5653e221f540] consecutive B-frames:  6.9% 10.8% 10.5% 71.8%
+[libx264 @ 0x5653e221f540] mb I  I16..4: 14.1% 12.7% 73.3%
+[libx264 @ 0x5653e221f540] mb P  I16..4:  2.4%  4.2%  2.7%  P16..4: 27.6%  9.0%  6.8%  0.0%  0.0%    skip:47.3%
+[libx264 @ 0x5653e221f540] mb B  I16..4:  0.4%  0.6%  0.3%  B16..8:  7.6%  3.9%  1.0%  direct: 4.7%  skip:81.5%  L0:33.0% L1:42.4% BI:24.5%
+[libx264 @ 0x5653e221f540] final ratefactor: 18.68
+[libx264 @ 0x5653e221f540] 8x8 transform intra:39.1% inter:31.0%
+[libx264 @ 0x5653e221f540] coded y,uvDC,uvAC intra: 67.6% 64.8% 37.9% inter: 9.4% 7.5% 1.4%
+[libx264 @ 0x5653e221f540] i16 v,h,dc,p: 49% 26% 14% 11%
+[libx264 @ 0x5653e221f540] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 22% 19% 19%  4%  6% 13%  6%  6%  6%
+[libx264 @ 0x5653e221f540] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 21% 17% 10%  7% 10% 11%  9%  9%  8%
+[libx264 @ 0x5653e221f540] i8c dc,h,v,p: 52% 22% 18%  8%
+[libx264 @ 0x5653e221f540] Weighted P-Frames: Y:3.4% UV:1.7%
+[libx264 @ 0x5653e221f540] kb/s:1519.50
+[libx264 @ 0x5653e216cbc0] frame I:169   Avg QP:16.29  size: 70758
+[libx264 @ 0x5653e216cbc0] frame P:6190  Avg QP:21.22  size:  7619
+[libx264 @ 0x5653e216cbc0] frame B:12679 Avg QP:25.07  size:  1639
+[libx264 @ 0x5653e216cbc0] consecutive B-frames:  7.2%  8.3% 11.4% 73.1%
+[libx264 @ 0x5653e216cbc0] mb I  I16..4: 15.2% 16.8% 68.0%
+[libx264 @ 0x5653e216cbc0] mb P  I16..4:  2.4%  4.1%  2.2%  P16..4: 25.6%  8.4%  5.5%  0.0%  0.0%    skip:51.7%
+[libx264 @ 0x5653e216cbc0] mb B  I16..4:  0.3%  0.6%  0.3%  B16..8:  7.0%  3.2%  0.8%  direct: 3.9%  skip:84.0%  L0:33.5% L1:43.6% BI:22.9%
+[libx264 @ 0x5653e216cbc0] final ratefactor: 20.19
+[libx264 @ 0x5653e216cbc0] 8x8 transform intra:41.5% inter:30.5%
+[libx264 @ 0x5653e216cbc0] coded y,uvDC,uvAC intra: 66.5% 63.2% 36.8% inter: 8.0% 5.8% 1.1%
+[libx264 @ 0x5653e216cbc0] i16 v,h,dc,p: 47% 27% 14% 13%
+[libx264 @ 0x5653e216cbc0] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 19% 21% 17%  5%  7% 13%  6%  6%  6%
+[libx264 @ 0x5653e216cbc0] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 19% 18% 11%  7%  9% 10%  9%  8%  8%
+[libx264 @ 0x5653e216cbc0] i8c dc,h,v,p: 50% 23% 18%  9%
+[libx264 @ 0x5653e216cbc0] Weighted P-Frames: Y:2.9% UV:1.6%
+[libx264 @ 0x5653e216cbc0] kb/s:1007.20
+
+real	2m1,382s
+user	12m28,275s
+sys	0m12,103s
+
+
+Average:        CPU     %user     %nice   %system   %iowait    %steal     %idle
+Average:        all     29,24     22,15      1,06      0,03      0,00     47,52
+
+Average:      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+Average:           10      1300      7,54      8,15      6,33         0
+```
+</details>
+
 ### Software decoding/encoding on Intel i5-8250U
 
 <details>
@@ -892,6 +1533,589 @@ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
 </details>
 
 ## Transcoding 2160p30 (H.264) to 1080p, 720p, and 480p (H.264) simultaneously
+
+### Software decoding/encoding on AMD Ryzen 5600G
+
+<details>
+<summary>Speed: 1.53x (time 6m56s), preset: medium</summary>
+
+```
+$ sar -u -q 30 & time \
+ffmpeg -y -c:v h264 -i bbb_sunflower_2160p_30fps_normal.mp4 \
+-c:a copy -vf scale=-1:1080 -c:v libx264 -b:v 4000k -preset medium -f mp4 /dev/null \
+-c:a copy -vf scale=-1:720 -c:v libx264 -b:v 2000k -preset medium -f mp4 /dev/null \
+-c:a copy -vf scale=-1:478 -c:v libx264 -b:v 1000k -preset medium -f mp4 /dev/null \
+; pkill -SIGINT sar
+[1] 28734
+Linux 5.15.0-41-generic (bzieba-desktop) 	12.07.2022 	_x86_64_	(12 CPU)
+ffmpeg version 4.4.2-0ubuntu0.22.04.1 Copyright (c) 2000-2021 the FFmpeg developers
+  built with gcc 11 (Ubuntu 11.2.0-19ubuntu1)
+  configuration: --prefix=/usr --extra-version=0ubuntu0.22.04.1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --arch=amd64 --enable-gpl --disable-stripping --enable-gnutls --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libjack --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librabbitmq --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-libzmq --enable-libzvbi --enable-lv2 --enable-omx --enable-openal --enable-opencl --enable-opengl --enable-sdl2 --enable-pocketsphinx --enable-librsvg --enable-libmfx --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libx264 --enable-shared
+  libavutil      56. 70.100 / 56. 70.100
+  libavcodec     58.134.100 / 58.134.100
+  libavformat    58. 76.100 / 58. 76.100
+  libavdevice    58. 13.100 / 58. 13.100
+  libavfilter     7.110.100 /  7.110.100
+  libswscale      5.  9.100 /  5.  9.100
+  libswresample   3.  9.100 /  3.  9.100
+  libpostproc    55.  9.100 / 55.  9.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'bbb_sunflower_2160p_30fps_normal.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    creation_time   : 2013-12-18T14:43:04.000000Z
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    composer        : Sacha Goedegebure
+  Duration: 00:10:34.53, start: 0.000000, bitrate: 7980 kb/s
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p, 3840x2160 [SAR 1:1 DAR 16:9], 7498 kb/s, 30 fps, 30 tbr, 30k tbn, 60 tbc (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:04.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+  Stream #0:1(und): Audio: mp3 (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 160 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+  Stream #0:2(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (libx264))
+  Stream #0:2 -> #0:1 (copy)
+  Stream #0:0 -> #1:0 (h264 (native) -> h264 (libx264))
+  Stream #0:2 -> #1:1 (copy)
+  Stream #0:0 -> #2:0 (h264 (native) -> h264 (libx264))
+  Stream #0:2 -> #2:1 (copy)
+Press [q] to stop, [?] for help
+[libx264 @ 0x55e865393040] using SAR=1/1
+[libx264 @ 0x55e865393040] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0x55e865393040] profile High, level 4.0, 4:2:0, 8-bit
+[libx264 @ 0x55e865393040] 264 - core 163 r3060 5db6aa6 - H.264/MPEG-4 AVC codec - Copyleft 2003-2021 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=18 lookahead_threads=3 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=abr mbtree=1 bitrate=4000 ratetol=1.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+[mp4 @ 0x55e865391800] track 1: codec frame size is not set
+Output #0, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #0:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 1920x1080 [SAR 1:1 DAR 16:9], q=2-31, 4000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:04.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 libx264
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/4000000 buffer size: 0 vbv_delay: N/A
+  Stream #0:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+[libx264 @ 0x55e865387a00] using SAR=1/1
+[libx264 @ 0x55e865387a00] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0x55e865387a00] profile High, level 3.1, 4:2:0, 8-bit
+[libx264 @ 0x55e865387a00] 264 - core 163 r3060 5db6aa6 - H.264/MPEG-4 AVC codec - Copyleft 2003-2021 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=18 lookahead_threads=3 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=abr mbtree=1 bitrate=2000 ratetol=1.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+[mp4 @ 0x55e865386840] track 1: codec frame size is not set
+Output #1, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #1:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 1280x720 [SAR 1:1 DAR 16:9], q=2-31, 2000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:04.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 libx264
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/2000000 buffer size: 0 vbv_delay: N/A
+  Stream #1:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+[libx264 @ 0x55e865379700] using SAR=3824/3825
+[libx264 @ 0x55e865379700] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0x55e865379700] profile High, level 3.1, 4:2:0, 8-bit
+[libx264 @ 0x55e865379700] 264 - core 163 r3060 5db6aa6 - H.264/MPEG-4 AVC codec - Copyleft 2003-2021 - http://www.videolan.org/x264.html - options: cabac=1 ref=3 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=7 psy=1 psy_rd=1.00:0.00 mixed_ref=1 me_range=16 chroma_me=1 trellis=1 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=-2 threads=15 lookahead_threads=2 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=40 rc=abr mbtree=1 bitrate=1000 ratetol=1.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+[mp4 @ 0x55e8654cf980] track 1: codec frame size is not set
+Output #2, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #2:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 850x478 [SAR 3824:3825 DAR 16:9], q=2-31, 1000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:04.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 libx264
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/1000000 buffer size: 0 vbv_delay: N/A
+  Stream #2:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+frame= 1358 fps= 46 q=30.0 q=30.0 q=30.0 size=   24320kB time=00:00:45.08 bitrate=4418.7kbits/s dup=6 drop=0 speed=1.52x    
+16:32:37        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:33:07        all     26,14     42,36      0,64      0,01      0,00     30,85
+
+16:32:37      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:33:07            9      1298      4,71      6,35      5,93         0
+frame= 2680 fps= 45 q=28.0 q=28.0 q=28.0 size=   46592kB time=00:01:29.24 bitrate=4276.6kbits/s dup=6 drop=0 speed= 1.5x    
+16:33:07        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:33:37        all     25,14     46,80      0,53      0,02      0,00     27,52
+
+16:33:07      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:33:37            3      1292      6,95      6,73      6,07         0
+frame= 4113 fps= 46 q=25.0 q=25.0 q=25.0 size=   69888kB time=00:02:17.24 bitrate=4171.4kbits/s dup=6 drop=0 speed=1.53x    
+16:33:37        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:34:07        all     22,68     39,28      0,49      0,05      0,00     37,50
+
+16:33:37      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:34:07            4      1292      6,76      6,70      6,08         0
+frame= 5562 fps= 46 q=24.0 q=24.0 q=25.0 size=   94720kB time=00:03:05.24 bitrate=4188.7kbits/s dup=6 drop=0 speed=1.55x    
+16:34:07        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:34:37        all     22,45     37,96      0,51      0,00      0,00     39,07
+
+16:34:07      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:34:37            8      1289      7,59      6,89      6,16         0
+frame= 6923 fps= 46 q=26.0 q=26.0 q=26.0 size=  120832kB time=00:03:50.84 bitrate=4287.9kbits/s dup=6 drop=0 speed=1.54x    
+16:34:37        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:35:07        all     23,81     43,22      0,55      0,00      0,00     32,43
+
+16:34:37      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:35:07           44      1296      8,24      7,15      6,27         0
+frame= 8306 fps= 46 q=26.0 q=26.0 q=26.0 size=  146176kB time=00:04:36.92 bitrate=4324.1kbits/s dup=6 drop=0 speed=1.54x    
+16:35:07        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:35:37        all     24,22     44,92      0,50      0,03      0,00     30,33
+
+16:35:07      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:35:37            9      1298      8,04      7,22      6,33         0
+frame= 9686 fps= 46 q=27.0 q=28.0 q=28.0 size=  173056kB time=00:05:23.00 bitrate=4389.0kbits/s dup=6 drop=0 speed=1.54x    
+16:35:37        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:36:07        all     24,44     44,09      0,59      0,00      0,00     30,87
+
+16:35:37      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:36:07           20      1292      9,18      7,55      6,46         0
+frame=11001 fps= 46 q=29.0 q=29.0 q=30.0 size=  199168kB time=00:06:06.68 bitrate=4449.5kbits/s dup=6 drop=0 speed=1.53x    
+16:36:07        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:36:37        all     25,82     49,65      0,53      0,01      0,00     23,99
+
+16:36:07      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:36:37           13      1290      8,91      7,65      6,53         0
+frame=12463 fps= 46 q=26.0 q=26.0 q=27.0 size=  217600kB time=00:06:55.64 bitrate=4288.7kbits/s dup=6 drop=0 speed=1.54x    
+16:36:37        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:37:07        all     23,72     34,84      0,48      0,01      0,00     40,95
+
+16:36:37      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:37:07            8      1291      7,89      7,55      6,54         0
+frame=13782 fps= 46 q=29.0 q=29.0 q=30.0 size=  248064kB time=00:07:39.32 bitrate=4424.2kbits/s dup=6 drop=0 speed=1.53x    
+16:37:07        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:37:37        all     25,60     47,77      0,52      0,00      0,00     26,11
+
+16:37:07      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:37:37           13      1294      8,54      7,75      6,64         0
+frame=15188 fps= 46 q=27.0 q=27.0 q=27.0 size=  267264kB time=00:08:26.36 bitrate=4323.8kbits/s dup=6 drop=0 speed=1.54x    
+16:37:37        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:38:07        all     25,72     40,45      0,52      0,01      0,00     33,31
+
+16:37:37      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:38:07           12      1295      8,97      7,96      6,74         0
+frame=16424 fps= 46 q=28.0 q=28.0 q=29.0 size=  291584kB time=00:09:07.64 bitrate=4361.7kbits/s dup=6 drop=0 speed=1.52x    
+16:38:07        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:38:37        all     28,19     52,59      0,54      0,00      0,00     18,68
+
+16:38:07      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:38:37            6      1295     13,09      9,12      7,17         0
+frame=17728 fps= 45 q=29.0 q=30.0 q=31.0 size=  318720kB time=00:09:50.84 bitrate=4419.0kbits/s dup=6 drop=0 speed=1.52x    
+16:38:37        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:39:07        all     28,16     47,50      0,56      0,00      0,00     23,78
+
+16:38:37      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:39:07           11      1295     11,09      9,00      7,20         0
+frame=19038 fps= 46 q=-1.0 Lq=-1.0 q=-1.0 size=  334349kB time=00:10:34.50 bitrate=4316.8kbits/s dup=6 drop=0 speed=1.53x    
+video:543933kB audio:74314kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+[libx264 @ 0x55e865393040] frame I:169   Avg QP:14.59  size:280428
+[libx264 @ 0x55e865393040] frame P:6060  Avg QP:19.59  size: 31056
+[libx264 @ 0x55e865393040] frame B:12809 Avg QP:24.06  size:  6326
+[libx264 @ 0x55e865393040] consecutive B-frames:  5.5%  9.6% 14.0% 70.8%
+[libx264 @ 0x55e865393040] mb I  I16..4: 10.6% 57.6% 31.8%
+[libx264 @ 0x55e865393040] mb P  I16..4:  1.5%  6.6%  1.2%  P16..4: 23.4%  9.8%  6.7%  0.0%  0.0%    skip:50.7%
+[libx264 @ 0x55e865393040] mb B  I16..4:  0.2%  0.8%  0.2%  B16..8: 21.1%  2.3%  0.5%  direct: 1.1%  skip:73.9%  L0:42.5% L1:52.2% BI: 5.3%
+[libx264 @ 0x55e865393040] final ratefactor: 20.64
+[libx264 @ 0x55e865393040] 8x8 transform intra:67.1% inter:72.5%
+[libx264 @ 0x55e865393040] coded y,uvDC,uvAC intra: 58.2% 63.8% 33.6% inter: 7.6% 7.4% 0.9%
+[libx264 @ 0x55e865393040] i16 v,h,dc,p: 33% 24%  7% 35%
+[libx264 @ 0x55e865393040] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 24% 16% 19%  5%  7% 10%  6%  7%  6%
+[libx264 @ 0x55e865393040] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 25% 16% 12%  6% 10% 10%  8%  7%  6%
+[libx264 @ 0x55e865393040] i8c dc,h,v,p: 54% 21% 17%  8%
+[libx264 @ 0x55e865393040] Weighted P-Frames: Y:4.2% UV:2.0%
+[libx264 @ 0x55e865393040] ref P L0: 66.0% 16.4% 12.4%  5.2%  0.1%
+[libx264 @ 0x55e865393040] ref B L0: 86.5% 11.1%  2.4%
+[libx264 @ 0x55e865393040] ref B L1: 96.1%  3.9%
+[libx264 @ 0x55e865393040] kb/s:3991.39
+[libx264 @ 0x55e865387a00] frame I:169   Avg QP:15.30  size:151309
+[libx264 @ 0x55e865387a00] frame P:6237  Avg QP:20.56  size: 15648
+[libx264 @ 0x55e865387a00] frame B:12632 Avg QP:25.29  size:  2958
+[libx264 @ 0x55e865387a00] consecutive B-frames:  5.0% 17.6%  5.8% 71.6%
+[libx264 @ 0x55e865387a00] mb I  I16..4:  8.7% 63.5% 27.8%
+[libx264 @ 0x55e865387a00] mb P  I16..4:  1.0%  4.8%  0.9%  P16..4: 26.5% 10.4%  7.2%  0.0%  0.0%    skip:49.3%
+[libx264 @ 0x55e865387a00] mb B  I16..4:  0.1%  0.6%  0.1%  B16..8: 21.9%  2.2%  0.5%  direct: 1.0%  skip:73.6%  L0:40.0% L1:54.2% BI: 5.8%
+[libx264 @ 0x55e865387a00] final ratefactor: 21.13
+[libx264 @ 0x55e865387a00] 8x8 transform intra:68.9% inter:66.4%
+[libx264 @ 0x55e865387a00] coded y,uvDC,uvAC intra: 65.1% 69.5% 43.8% inter: 8.6% 7.7% 1.4%
+[libx264 @ 0x55e865387a00] i16 v,h,dc,p: 33% 26%  6% 35%
+[libx264 @ 0x55e865387a00] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 20% 16% 17%  5%  8% 11%  8%  8%  8%
+[libx264 @ 0x55e865387a00] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 21% 16% 12%  6% 11% 11%  9%  8%  7%
+[libx264 @ 0x55e865387a00] i8c dc,h,v,p: 51% 22% 17% 10%
+[libx264 @ 0x55e865387a00] Weighted P-Frames: Y:2.8% UV:1.9%
+[libx264 @ 0x55e865387a00] ref P L0: 62.9% 16.3% 15.2%  5.6%  0.0%
+[libx264 @ 0x55e865387a00] ref B L0: 87.1% 10.0%  3.0%
+[libx264 @ 0x55e865387a00] ref B L1: 95.6%  4.4%
+[libx264 @ 0x55e865387a00] kb/s:2023.79
+[libx264 @ 0x55e865379700] frame I:169   Avg QP:16.18  size: 78173
+[libx264 @ 0x55e865379700] frame P:6101  Avg QP:21.28  size:  7579
+[libx264 @ 0x55e865379700] frame B:12768 Avg QP:26.53  size:  1596
+[libx264 @ 0x55e865379700] consecutive B-frames:  6.9%  7.6% 10.3% 75.2%
+[libx264 @ 0x55e865379700] mb I  I16..4:  8.7% 58.9% 32.4%
+[libx264 @ 0x55e865379700] mb P  I16..4:  0.7%  3.6%  1.0%  P16..4: 25.3% 10.4%  7.6%  0.0%  0.0%    skip:51.3%
+[libx264 @ 0x55e865379700] mb B  I16..4:  0.1%  0.5%  0.2%  B16..8: 22.6%  2.6%  0.8%  direct: 1.5%  skip:71.8%  L0:41.1% L1:51.8% BI: 7.1%
+[libx264 @ 0x55e865379700] final ratefactor: 21.46
+[libx264 @ 0x55e865379700] 8x8 transform intra:63.7% inter:63.6%
+[libx264 @ 0x55e865379700] coded y,uvDC,uvAC intra: 69.5% 74.1% 51.1% inter: 8.8% 7.6% 1.7%
+[libx264 @ 0x55e865379700] i16 v,h,dc,p: 31% 31%  7% 31%
+[libx264 @ 0x55e865379700] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 18% 18% 16%  6%  8% 11%  8%  8%  9%
+[libx264 @ 0x55e865379700] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 18% 20% 12%  6% 10% 10%  9%  7%  7%
+[libx264 @ 0x55e865379700] i8c dc,h,v,p: 49% 24% 16% 11%
+[libx264 @ 0x55e865379700] Weighted P-Frames: Y:3.7% UV:2.2%
+[libx264 @ 0x55e865379700] ref P L0: 62.3% 16.8% 11.8%  8.7%  0.3%
+[libx264 @ 0x55e865379700] ref B L0: 78.7% 15.5%  5.9%
+[libx264 @ 0x55e865379700] ref B L1: 90.8%  9.2%
+[libx264 @ 0x55e865379700] kb/s:1006.38
+
+real	6m55,677s
+user	56m30,294s
+sys	0m14,637s
+
+
+Average:        CPU     %user     %nice   %system   %iowait    %steal     %idle
+Average:        all     25,08     43,95      0,53      0,01      0,00     30,42
+
+Average:      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+Average:           12      1294      8,46      7,51      6,47         0
+```
+</details>
+
+<details>
+<summary>Speed: 1.96x (time 5m24s), preset: veryfast</summary>
+
+```
+$ sar -u -q 30 & time \
+ffmpeg -y -c:v h264 -i bbb_sunflower_2160p_30fps_normal.mp4 \
+-c:a copy -vf scale=-1:1080 -c:v libx264 -b:v 4000k -preset veryfast -f mp4 /dev/null \
+-c:a copy -vf scale=-1:720 -c:v libx264 -b:v 2000k -preset veryfast -f mp4 /dev/null \
+-c:a copy -vf scale=-1:478 -c:v libx264 -b:v 1000k -preset veryfast -f mp4 /dev/null \
+; pkill -SIGINT sar
+[1] 29597
+Linux 5.15.0-41-generic (bzieba-desktop) 	12.07.2022 	_x86_64_	(12 CPU)
+ffmpeg version 4.4.2-0ubuntu0.22.04.1 Copyright (c) 2000-2021 the FFmpeg developers
+  built with gcc 11 (Ubuntu 11.2.0-19ubuntu1)
+  configuration: --prefix=/usr --extra-version=0ubuntu0.22.04.1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --arch=amd64 --enable-gpl --disable-stripping --enable-gnutls --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libdav1d --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libjack --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librabbitmq --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libsrt --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzimg --enable-libzmq --enable-libzvbi --enable-lv2 --enable-omx --enable-openal --enable-opencl --enable-opengl --enable-sdl2 --enable-pocketsphinx --enable-librsvg --enable-libmfx --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libx264 --enable-shared
+  libavutil      56. 70.100 / 56. 70.100
+  libavcodec     58.134.100 / 58.134.100
+  libavformat    58. 76.100 / 58. 76.100
+  libavdevice    58. 13.100 / 58. 13.100
+  libavfilter     7.110.100 /  7.110.100
+  libswscale      5.  9.100 /  5.  9.100
+  libswresample   3.  9.100 /  3.  9.100
+  libpostproc    55.  9.100 / 55.  9.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'bbb_sunflower_2160p_30fps_normal.mp4':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    creation_time   : 2013-12-18T14:43:04.000000Z
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    composer        : Sacha Goedegebure
+  Duration: 00:10:34.53, start: 0.000000, bitrate: 7980 kb/s
+  Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p, 3840x2160 [SAR 1:1 DAR 16:9], 7498 kb/s, 30 fps, 30 tbr, 30k tbn, 60 tbc (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:04.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+  Stream #0:1(und): Audio: mp3 (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 160 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+  Stream #0:2(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+Stream mapping:
+  Stream #0:0 -> #0:0 (h264 (native) -> h264 (libx264))
+  Stream #0:2 -> #0:1 (copy)
+  Stream #0:0 -> #1:0 (h264 (native) -> h264 (libx264))
+  Stream #0:2 -> #1:1 (copy)
+  Stream #0:0 -> #2:0 (h264 (native) -> h264 (libx264))
+  Stream #0:2 -> #2:1 (copy)
+Press [q] to stop, [?] for help
+[libx264 @ 0x5625aee69040] using SAR=1/1
+[libx264 @ 0x5625aee69040] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0x5625aee69040] profile High, level 4.0, 4:2:0, 8-bit
+[libx264 @ 0x5625aee69040] 264 - core 163 r3060 5db6aa6 - H.264/MPEG-4 AVC codec - Copyleft 2003-2021 - http://www.videolan.org/x264.html - options: cabac=1 ref=1 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=2 psy=1 psy_rd=1.00:0.00 mixed_ref=0 me_range=16 chroma_me=1 trellis=0 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=0 threads=18 lookahead_threads=6 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=1 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=10 rc=abr mbtree=1 bitrate=4000 ratetol=1.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+[mp4 @ 0x5625aee67800] track 1: codec frame size is not set
+Output #0, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #0:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 1920x1080 [SAR 1:1 DAR 16:9], q=2-31, 4000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:04.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 libx264
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/4000000 buffer size: 0 vbv_delay: N/A
+  Stream #0:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+[libx264 @ 0x5625aee5da00] using SAR=1/1
+[libx264 @ 0x5625aee5da00] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0x5625aee5da00] profile High, level 3.1, 4:2:0, 8-bit
+[libx264 @ 0x5625aee5da00] 264 - core 163 r3060 5db6aa6 - H.264/MPEG-4 AVC codec - Copyleft 2003-2021 - http://www.videolan.org/x264.html - options: cabac=1 ref=1 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=2 psy=1 psy_rd=1.00:0.00 mixed_ref=0 me_range=16 chroma_me=1 trellis=0 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=0 threads=18 lookahead_threads=5 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=1 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=10 rc=abr mbtree=1 bitrate=2000 ratetol=1.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+[mp4 @ 0x5625aee5c840] track 1: codec frame size is not set
+Output #1, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #1:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 1280x720 [SAR 1:1 DAR 16:9], q=2-31, 2000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:04.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 libx264
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/2000000 buffer size: 0 vbv_delay: N/A
+  Stream #1:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+[libx264 @ 0x5625aee4f700] using SAR=3824/3825
+[libx264 @ 0x5625aee4f700] using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 BMI2 AVX2
+[libx264 @ 0x5625aee4f700] profile High, level 3.1, 4:2:0, 8-bit
+[libx264 @ 0x5625aee4f700] 264 - core 163 r3060 5db6aa6 - H.264/MPEG-4 AVC codec - Copyleft 2003-2021 - http://www.videolan.org/x264.html - options: cabac=1 ref=1 deblock=1:0:0 analyse=0x3:0x113 me=hex subme=2 psy=1 psy_rd=1.00:0.00 mixed_ref=0 me_range=16 chroma_me=1 trellis=0 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=0 threads=15 lookahead_threads=3 sliced_threads=0 nr=0 decimate=1 interlaced=0 bluray_compat=0 constrained_intra=0 bframes=3 b_pyramid=2 b_adapt=1 b_bias=0 direct=1 weightb=1 open_gop=0 weightp=1 keyint=250 keyint_min=25 scenecut=40 intra_refresh=0 rc_lookahead=10 rc=abr mbtree=1 bitrate=1000 ratetol=1.0 qcomp=0.60 qpmin=0 qpmax=69 qpstep=4 ip_ratio=1.40 aq=1:1.00
+[mp4 @ 0x5625aefa5980] track 1: codec frame size is not set
+Output #2, mp4, to '/dev/null':
+  Metadata:
+    major_brand     : isom
+    minor_version   : 1
+    compatible_brands: isomavc1
+    composer        : Sacha Goedegebure
+    title           : Big Buck Bunny, Sunflower version
+    artist          : Blender Foundation 2008, Janus Bager Kristensen 2013
+    comment         : Creative Commons Attribution 3.0 - http://bbb3d.renderfarming.net
+    genre           : Animation
+    encoder         : Lavf58.76.100
+  Stream #2:0(und): Video: h264 (avc1 / 0x31637661), yuv420p(tv, progressive), 850x478 [SAR 3824:3825 DAR 16:9], q=2-31, 1000 kb/s, 30 fps, 15360 tbn (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:04.000000Z
+      handler_name    : GPAC ISO Video Handler
+      vendor_id       : [0][0][0][0]
+      encoder         : Lavc58.134.100 libx264
+    Side data:
+      cpb: bitrate max/min/avg: 0/0/1000000 buffer size: 0 vbv_delay: N/A
+  Stream #2:1(und): Audio: ac3 (ac-3 / 0x332D6361), 48000 Hz, 5.1(side), fltp, 320 kb/s (default)
+    Metadata:
+      creation_time   : 2013-12-18T14:43:06.000000Z
+      handler_name    : GPAC ISO Audio Handler
+      vendor_id       : [0][0][0][0]
+    Side data:
+      audio service type: main
+frame= 1728 fps= 58 q=25.0 q=26.0 q=27.0 size=   29696kB time=00:00:57.56 bitrate=4225.8kbits/s dup=6 drop=0 speed=1.94x    
+16:41:19        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:41:49        all     29,84     13,80      0,68      0,02      0,00     55,66
+
+16:41:19      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:41:49           12      1302      4,55      6,65      6,60         0
+frame= 3537 fps= 59 q=22.0 q=23.0 q=23.0 size=   59136kB time=00:01:58.04 bitrate=4103.8kbits/s dup=6 drop=0 speed=1.98x    
+16:41:49        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:42:19        all     25,53     14,57      0,66      0,02      0,00     59,22
+
+16:41:49      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:42:19            4      1300      4,39      6,42      6,52         0
+frame= 5380 fps= 60 q=22.0 q=22.0 q=23.0 size=   91904kB time=00:02:59.48 bitrate=4194.6kbits/s dup=6 drop=0 speed=   2x    
+16:42:19        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:42:49        all     24,93     13,25      0,60      0,05      0,00     61,17
+
+16:42:19      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:42:49            9      1299      5,82      6,54      6,56         0
+frame= 7161 fps= 60 q=25.0 q=25.0 q=25.0 size=  126464kB time=00:03:58.52 bitrate=4343.3kbits/s dup=6 drop=0 speed=   2x    
+16:42:49        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:43:19        all     26,07     14,54      0,65      0,00      0,00     58,74
+
+16:42:49      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:43:19            8      1297      5,91      6,49      6,54         0
+frame= 8997 fps= 60 q=25.0 q=25.0 q=25.0 size=  158720kB time=00:04:59.96 bitrate=4334.6kbits/s dup=6 drop=0 speed=   2x    
+16:43:19        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:43:49        all     26,84     14,72      0,68      0,00      0,00     57,76
+
+16:43:19      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:43:49            6      1299      6,54      6,61      6,58         0
+frame=10723 fps= 60 q=27.0 q=27.0 q=28.0 size=  193792kB time=00:05:57.56 bitrate=4439.8kbits/s dup=6 drop=0 speed=1.99x    
+16:43:49        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:44:19        all     29,20     16,41      0,65      0,00      0,00     53,75
+
+16:43:49      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:44:19            5      1297      5,91      6,43      6,52         0
+frame=12511 fps= 60 q=25.0 q=25.0 q=25.0 size=  219136kB time=00:06:57.08 bitrate=4304.0kbits/s dup=6 drop=0 speed=1.99x    
+16:44:19        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:44:49        all     26,35     12,40      0,58      0,00      0,00     60,67
+
+16:44:19      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:44:49            2      1298      6,26      6,48      6,53         0
+frame=14231 fps= 59 q=28.0 q=28.0 q=29.0 size=  257792kB time=00:07:54.20 bitrate=4453.4kbits/s dup=6 drop=0 speed=1.98x    
+16:44:49        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:45:19        all     29,94     15,97      0,70      0,01      0,00     53,37
+
+16:44:49      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:45:19           10      1295      7,43      6,78      6,63         0
+frame=15967 fps= 59 q=26.0 q=26.0 q=27.0 size=  283136kB time=00:08:52.28 bitrate=4357.5kbits/s dup=6 drop=0 speed=1.97x    
+16:45:19        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:45:49        all     30,09     14,99      0,66      0,01      0,00     54,25
+
+16:45:19      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:45:49            5      1296      7,03      6,76      6,63         0
+frame=17601 fps= 59 q=28.0 q=29.0 q=29.0 size=  316416kB time=00:09:46.56 bitrate=4419.1kbits/s dup=6 drop=0 speed=1.96x    
+16:45:49        CPU     %user     %nice   %system   %iowait    %steal     %idle
+16:46:19        all     32,25     16,42      0,70      0,02      0,00     50,60
+
+16:45:49      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+16:46:19            3      1300      6,74      6,72      6,62         0
+frame=19038 fps= 59 q=-1.0 Lq=-1.0 q=-1.0 size=  334393kB time=00:10:34.50 bitrate=4317.3kbits/s dup=6 drop=0 speed=1.96x    
+video:544054kB audio:74314kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+[libx264 @ 0x5625aee69040] frame I:168   Avg QP:14.59  size:258928
+[libx264 @ 0x5625aee69040] frame P:6314  Avg QP:19.30  size: 31082
+[libx264 @ 0x5625aee69040] frame B:12556 Avg QP:22.29  size:  6125
+[libx264 @ 0x5625aee69040] consecutive B-frames:  6.3% 12.9% 13.2% 67.6%
+[libx264 @ 0x5625aee69040] mb I  I16..4: 18.9% 18.5% 62.6%
+[libx264 @ 0x5625aee69040] mb P  I16..4:  4.0%  7.7%  2.3%  P16..4: 22.6%  8.2%  4.8%  0.0%  0.0%    skip:50.4%
+[libx264 @ 0x5625aee69040] mb B  I16..4:  0.6%  1.1%  0.3%  B16..8:  7.1%  2.8%  0.5%  direct: 3.0%  skip:84.6%  L0:36.7% L1:46.1% BI:17.3%
+[libx264 @ 0x5625aee69040] final ratefactor: 19.38
+[libx264 @ 0x5625aee69040] 8x8 transform intra:50.6% inter:34.9%
+[libx264 @ 0x5625aee69040] coded y,uvDC,uvAC intra: 59.7% 55.7% 24.5% inter: 5.9% 5.8% 0.7%
+[libx264 @ 0x5625aee69040] i16 v,h,dc,p: 51% 22% 15% 12%
+[libx264 @ 0x5625aee69040] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 24% 17% 18%  4%  6% 13%  6%  6%  5%
+[libx264 @ 0x5625aee69040] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 23% 16%  9%  7% 10% 11%  8%  9%  7%
+[libx264 @ 0x5625aee69040] i8c dc,h,v,p: 53% 21% 19%  7%
+[libx264 @ 0x5625aee69040] Weighted P-Frames: Y:3.1% UV:1.5%
+[libx264 @ 0x5625aee69040] kb/s:3991.96
+[libx264 @ 0x5625aee5da00] frame I:168   Avg QP:15.44  size:138673
+[libx264 @ 0x5625aee5da00] frame P:6369  Avg QP:20.35  size: 15934
+[libx264 @ 0x5625aee5da00] frame B:12501 Avg QP:23.60  size:  2857
+[libx264 @ 0x5625aee5da00] consecutive B-frames:  5.6% 18.3%  6.6% 69.5%
+[libx264 @ 0x5625aee5da00] mb I  I16..4: 17.3% 17.7% 65.0%
+[libx264 @ 0x5625aee5da00] mb P  I16..4:  3.3%  5.3%  2.1%  P16..4: 26.2%  8.4%  4.9%  0.0%  0.0%    skip:49.7%
+[libx264 @ 0x5625aee5da00] mb B  I16..4:  0.4%  0.8%  0.3%  B16..8:  6.7%  2.6%  0.5%  direct: 2.8%  skip:85.9%  L0:33.7% L1:45.4% BI:20.9%
+[libx264 @ 0x5625aee5da00] final ratefactor: 19.87
+[libx264 @ 0x5625aee5da00] 8x8 transform intra:45.3% inter:32.9%
+[libx264 @ 0x5625aee5da00] coded y,uvDC,uvAC intra: 64.3% 59.7% 31.3% inter: 7.1% 5.9% 0.9%
+[libx264 @ 0x5625aee5da00] i16 v,h,dc,p: 49% 23% 14% 14%
+[libx264 @ 0x5625aee5da00] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 20% 16% 17%  5%  7% 15%  7%  6%  6%
+[libx264 @ 0x5625aee5da00] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 21% 16% 11%  7% 10% 11%  8%  9%  8%
+[libx264 @ 0x5625aee5da00] i8c dc,h,v,p: 51% 21% 19%  9%
+[libx264 @ 0x5625aee5da00] Weighted P-Frames: Y:2.3% UV:1.6%
+[libx264 @ 0x5625aee5da00] kb/s:2023.26
+[libx264 @ 0x5625aee4f700] frame I:170   Avg QP:16.44  size: 70250
+[libx264 @ 0x5625aee4f700] frame P:6182  Avg QP:21.42  size:  7653
+[libx264 @ 0x5625aee4f700] frame B:12686 Avg QP:25.29  size:  1632
+[libx264 @ 0x5625aee4f700] consecutive B-frames:  7.2%  7.9% 11.6% 73.3%
+[libx264 @ 0x5625aee4f700] mb I  I16..4: 15.5% 17.5% 67.0%
+[libx264 @ 0x5625aee4f700] mb P  I16..4:  2.3%  4.1%  2.2%  P16..4: 25.7%  8.3%  5.5%  0.0%  0.0%    skip:51.9%
+[libx264 @ 0x5625aee4f700] mb B  I16..4:  0.3%  0.6%  0.3%  B16..8:  6.8%  3.1%  0.7%  direct: 3.9%  skip:84.3%  L0:33.4% L1:43.3% BI:23.4%
+[libx264 @ 0x5625aee4f700] final ratefactor: 20.30
+[libx264 @ 0x5625aee4f700] 8x8 transform intra:42.2% inter:31.4%
+[libx264 @ 0x5625aee4f700] coded y,uvDC,uvAC intra: 67.2% 64.2% 37.4% inter: 8.0% 5.7% 1.1%
+[libx264 @ 0x5625aee4f700] i16 v,h,dc,p: 46% 27% 14% 13%
+[libx264 @ 0x5625aee4f700] i8 v,h,dc,ddl,ddr,vr,hd,vl,hu: 19% 20% 17%  5%  7% 13%  6%  6%  7%
+[libx264 @ 0x5625aee4f700] i4 v,h,dc,ddl,ddr,vr,hd,vl,hu: 19% 18% 11%  7%  9% 10%  9%  9%  8%
+[libx264 @ 0x5625aee4f700] i8c dc,h,v,p: 49% 23% 18%  9%
+[libx264 @ 0x5625aee4f700] Weighted P-Frames: Y:3.0% UV:1.6%
+[libx264 @ 0x5625aee4f700] kb/s:1007.90
+
+real	5m23,689s
+user	27m25,175s
+sys	0m16,861s
+
+
+Average:        CPU     %user     %nice   %system   %iowait    %steal     %idle
+Average:        all     28,11     14,71      0,66      0,01      0,00     56,52
+
+Average:      runq-sz  plist-sz   ldavg-1   ldavg-5  ldavg-15   blocked
+Average:            6      1298      6,06      6,59      6,57         0
+```
+</details>
 
 ### Software decoding/encoding on Intel i5-8250U
 
