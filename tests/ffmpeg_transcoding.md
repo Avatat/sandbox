@@ -6,6 +6,9 @@ Currently, only Intel and NVIDIA acceleration was tested by me. I have to get a 
 The reference source for every transcoding is a popular, open-source animation [Big Buck Bunny](http://bbb3d.renderfarming.net/).
 
 ## Transcoding 1080p30 (H.264) to 720p, 540p, and 480p (H.264) simultaneously
+
+![](img/transcoding_medium.png)
+
 Sometimes, I had to set 478 px height, because of BBB ratio and `[libx264 @ 0x555bb8838fc0] width not divisible by 2 (853x480)` error.
 
 ### Software decoding/encoding on AMD Ryzen 5600G
