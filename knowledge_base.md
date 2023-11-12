@@ -4,8 +4,8 @@ Zero-copy:
 
 Grow LVM:
 1. Resize partition(s) under LVM using `parted`
-2. Grow LV: `lvextend -l +100%FREE /dev/volume/lv`
-3. Grow FS: `resize2fs /dev/volume/lv`
+1. Grow LV: `lvextend -l +100%FREE /dev/volume/lv`
+1. Grow FS: `resize2fs /dev/volume/lv`
 
 SCSI, local disks:
 * `dmesg | grep sda`
